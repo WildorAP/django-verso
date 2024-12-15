@@ -127,3 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'platea/static')
 ]
+
+ALLOWED_HOSTS = ['localhost','prueba-cusco-production.up.railway.app']
