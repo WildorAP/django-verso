@@ -1,0 +1,352 @@
+/* Hacer que el body ocupe toda la altura de la pantalla */
+body {
+    height: 100%;
+    margin-top: 0;
+    font-family: 'Monstserrat', sans-serif;
+    /* Ejemplo de Roboto como tipografía */
+    display: flex;
+    flex-direction: column;
+    
+    background-image: url('./images/3626052.jpg');
+    /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center;
+    /* Centra la imagen */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    background-attachment: fixed;
+    /* Hace que la imagen de fondo sea fija mientras se desplaza el contenido */
+    background-color: rgba(0, 0, 0, 0.35);
+    /* Añade una capa oscura */
+    background-blend-mode: darken;
+    /* Mezcla el color oscuro con la imagen */
+}
+
+
+
+/* Estilos para el header */
+header {
+
+    
+    display: flex;
+    justify-content: space-between;
+
+    
+    flex-basis: 50%;
+
+
+    background-color: rgba(0, 51, 102, 0.1);/* Azul pastel */
+    color: white;
+    margin-right: 100px;
+
+    text-align: right;
+    position: fixed;
+    width: 100%;
+
+}
+
+#logo {
+    
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+#home {
+    display: flex;
+    padding-top: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
+    
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+
+    font-size: 2rem;
+    min-height: 70vh;
+    gap: 40vh;
+    
+    
+
+
+}
+
+/* Calculadora*/
+
+
+.calculadora p{
+    font-size: 0.8rem;
+}
+.tipodecambio {
+    text-align: center;
+}
+.calculator-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 40vh;
+}
+
+
+
+form div {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.transaction-options {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    
+}
+
+.transaction-options label {
+    display: inline-block;
+    font-weight: normal;
+    font-size: 1rem;
+}
+.marcas-cotizacion{
+    font-size: 1rem;
+}
+
+.USDT input{
+    width: 93%;
+}
+
+.result {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+/* Fin de Calculadora*/
+
+
+
+
+.process-gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Estilos para cada proceso */
+.process-item {
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    flex-basis: 30%;
+    /* Cada columna ocupa el 30% del contenedor */
+}
+
+/* Estilos para las imágenes de los procesos */
+.process-item img {
+    width: 100px;
+    /* Ajusta el tamaño de la imagen */
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border-radius: 0%;
+    /* Hace las imágenes circulares */
+}
+
+/* Estilos para los encabezados de los procesos */
+.process-item h2 {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Estilos para las descripciones */
+.process-item p {
+    font-size: 1rem;
+    color: white;
+}
+
+/* Estilos para el footer */
+footer {
+    background-color: rgba(0, 51, 102, 0.1);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+}
+
+
+
+/* Asegurar que las secciones crezcan según el contenido */
+section {
+    padding: 20px;
+    margin: 10px;
+    flex-grow: 1;
+    /* Esto asegura que las secciones crezcan para ocupar el espacio restante si es necesario */
+    color: white;
+}
+
+/* Estilos del nav */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 50px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+#whatsapp {
+
+    position: fixed;
+    bottom: 0;
+    /* Se mantendrá en la parte superior */
+    right: 0;
+    /* O puedes poner left: 0 si lo quieres a la izquierda */
+
+    padding: 15px;
+
+    z-index: 1000;
+    /* Asegura que esté encima de otros elementos */
+    width: 50px;
+    /* Ajusta el ancho de la sección fija */
+}
+
+#whatsapp img:hover {
+    transform: scale(1.2);
+    /* Agranda la imagen al 120% al pasar el cursor */
+}
+
+.socios {
+    
+    display: flex;
+    justify-content: center;
+    gap: 70px;
+    text-align: center;
+    margin-top: 20%;
+    
+}
+
+.socios p {
+    font-size: 0.8rem;
+    color: white;
+
+}
+.servicio {
+    text-align: center;
+    
+}
+/* Para pantallas pequeñas, cambia a diseño en una columna */
+@media (max-width: 768px) {
+    
+
+    .process-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .process-item {
+        flex-basis: 100%;
+        /* Ocupa todo el ancho en pantallas pequeñas */
+        margin-bottom: 20px;
+    }
+
+    body {
+        height: 100%;
+        margin-top: 0;
+        font-family: 'Monstserrat', sans-serif;
+        /* Ejemplo de Roboto como tipografía */
+        display: flex;
+        flex-direction: column;
+        
+        
+        background-color: rgba(0, 0, 0, 0);
+        /* Añade una capa oscura */
+       
+    }
+    
+    
+    #home {
+        flex-direction: column;
+        align-items: center;
+         justify-content: center;
+        min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+        margin-top: 15vh;
+        gap:10vh;
+    }
+   
+    
+    .calculadora {
+        flex-basis: auto;
+        /* Ocupa todo el ancho en pantallas pequeñas */
+        margin-bottom: 20px;
+    }
+
+}
+
+@media (min-width: 768.1px) and (max-width: 1399.98px){
+    
+
+    .process-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .process-item {
+        flex-basis: 100%;
+        /* Ocupa todo el ancho en pantallas pequeñas */
+        margin-bottom: 20px;
+    }
+    
+    #home {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+        margin-top: 15vh;
+        gap:10vh;
+    }
+   
+    
+    .calculadora {
+        flex-basis: auto;
+        /* Ocupa todo el ancho en pantallas pequeñas */
+        margin-bottom: 20px;
+    }
+
+}
+
+

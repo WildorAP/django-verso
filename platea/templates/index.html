@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLATEA HUB</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/favicon-32x32.png' %}" type="image/x-icon">
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <img src="{% static 'images/Sin_título-removebg-preview (1).png' %}" style="width:150px; height:auto;" />
+            
+        </div>
+        <div id="barra">
+            <nav>
+                <ul>
+                    <li><a href="#home">Nosotros</a></li>
+                    <li><a href="#about">Cambiar</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+    <main>
+        <section id="home">
+            <div class="principal">
+                <div class="servicio">
+                    <p>
+                        Brindamos el mejor servicio de <br>compra
+                        y venta de stablecoin<br> (USDT, USDC) en Perú.
+                    </p>
+                </div>
+
+                <div class="socios">
+                    <div class="sbs">
+                        <img src="{% static 'images/verificado (2).png' %}" alt="Proceso 2" style="width:40px; height:40px;" />
+                        <p>Inscritos en la SBS-UIF <br>como PSAV </p>
+                    </div>
+                    <div class="binance">
+                        <img src="{% static 'images/binance.png' %}" alt="Proceso 2" style="width:40px; height:40px;" />
+                        <p>Partners de BINANCE</p>
+                    </div>
+                </div>
+            </div>
+            <div class="calculadora">
+                <div class="calculator-container">
+                    <div class="tipodecambio">
+                        <p>TC referencial al momento<br><span id="TC-PEN"></span>
+                            <br><span id="TC-USD"></span>
+                        </p>
+
+
+                    </div>
+                    <form id="currencyCalculator" onsubmit="return false;">
+                        <div class="transaction-options">
+                            <label>
+                                <input type="radio" name="transactionType" value="sell"> Te compramos
+                            </label>
+                            <label>
+                                <input type="radio" name="transactionType" value="buy" checked> Te vendemos
+                            </label>
+                            
+                        </div>
+                        <div class="USDT">
+                            <div class="marcas-cotizacion">
+                                <label for="amount">USDT:</label>
+                            </div>
+                            <input type="number" id="amount" placeholder="0.00" required>
+                        </div>
+                        <div>
+                            <div class="marcas-cotizacion">
+                                <label for="toCurrency">EN:</label>
+                            </div>
+                            <select id="toCurrency" required>
+                                <option value="USD">Dólar Estadounidense (USD)</option>
+                                <option value="PEN">Nuevo Sol Peruano (PEN)</option>
+                            </select>
+                        </div>
+
+                        <button type="button" onclick="convertCurrency()">Convertir</button>
+                    </form>
+                    <div class="result">
+                        <h2>Total en <span id="currencyLabel">USD</span>: <span id="convertedAmount">0.00</span></h2>
+                    </div>
+
+                </div>
+
+                <script src="script.js"></script>
+
+            </div>
+        </section>
+        <section id="contact">
+            <h2>
+                <script type="text/javascript"
+                    src="https://files.coinmarketcap.com/static/widget/coinMarquee.js"></script>
+                <div id="coinmarketcap-widget-marquee" coins="1,1027,825,1839,6636,2010,1975" currency="USD"
+                    theme="dark" transparent="false" show-symbol-logo="true"></div>
+            </h2>
+
+        </section>
+        <section id="about">
+            <h1>¿Cuál es el procedimiento?</h1>
+            <div class="process-gallery">
+                <div class="process-item">
+                    <img src="{% static 'images/whatsapp (1).png' %}" alt="Proceso 1" />
+                    <h2>Proceso 1: Escríbenos </h2>
+                    <p>Escríbenos por whatsapp y registrate con nosotros. La primera vez sera necesario pasar un proceso
+                        de KYC, establecido por la SBS.</p>
+                </div>
+                <div class="process-item">
+                    <img src="{% static 'images/grafico-de-acciones.png' %}" alt="Proceso 2" />
+                    <h2>Proceso 2: Cotiza</h2>
+                    <p>Te brindaremos una cotizacion ya sea en venta o compra. ¡Recuerda que a mayor volumen mejor
+                        precio!</p>
+                </div>
+                <div class="process-item">
+                    <img src="{% static 'images/transferencia-de-dinero.png' %}" alt="Proceso 3" />
+                    <h2>Proceso 3: Deposita</h2>
+                    <p>Envianos la constancia de tu depósito. ¡Tu pago puede ser por CCI Inmediato de cualquier banco de
+                        Perú!.</p>
+                </div>
+                <div class="process-item">
+                    <img src="{% static 'images/blockchain.png' %}" alt="Proceso 4" />
+                    <h2>Proceso 4: Recibe</h2>
+                    <p>Puedes recibir tus Stablecoin (USDT,USDC) por redes de blockchain (TRC-20,Solana, etc) o BINANCE.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section id="whatsapp">
+            <a href="https://wa.me/34612345678?text=Hola%2C%20quiero%20más%20información" target="_blank"
+                style="text-decoration:none;">
+                <img src="{% static 'images/social.png' %}" alt="WhatsApp" style="vertical-align:middle; width:50px; height:50px;">
+                <span style="vertical-align:middle;"></span>
+            </a>
+        </section>
+
+        </section>
+
+    </main>
+
+
+
+    <footer>
+        <p>Puedes ponerte en contacto con nosotros en: <a href="mailto:platehub@correo.com">platehub@correo.com</a><br>
+            RAZÓN SOCIAL: PLATEA HUB S.A.C - RUC: 20612682594<br>Copyright © 2024 PlateaHub</p>
+
+    </footer>
+
+    <script src="{% static 'script.js' %}" defer></script>
+</body>
+
+</html>
