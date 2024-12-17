@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'platea'
+    'platea',
+   
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -138,3 +140,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ALLOWED_HOSTS = ['www.plateahub.com', 'plateahub.com','localhost','127.0.0.1','prueba-cusco-production.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS =['http://*','https://prueba-cusco-production.up.railway.app']
+
