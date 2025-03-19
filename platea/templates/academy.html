@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VersoTek.io</title>
+    <link rel="stylesheet" href="{% static 'academy.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <a href="{% url 'principal' %}">
+                <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" style="width:150px; height:auto;">
+            </a>
+        </div>
+        <nav>
+            <ul>
+
+
+                <li><a href="{% url 'principal' %}">Nosotros</a></li>
+                <li><a href="{% url 'empresas' %}">Servicios</a></li>
+                <li><a href="{% url 'academy' %}">Academy</a></li>
+                <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank"
+                    style="text-decoration:none;">Contacto</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="academy">
+            <div class="carousel-container">
+                <button id="prevBtn">❮</button>
+                <div class="carousel-wrapper">
+                    <div class="carousel">
+                        <div class="video-slide">
+                            <div class="text">
+                                <h1>1. ¿Qué es un CEX - BINANCE?</h1>
+                                <p>Un CEX es un Exchange Centralizado, donde puedes realizar todas tus operaciones de compra y venta de USDT, USDC.</p>
+                            </div>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/XiFA-988u_g"
+                                    title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                        </div>
+        
+                        <div class="video-slide">
+                            <div class="text">
+                                <h1>2. ¿Qué es BINANCE pay?</h1>
+                                <p>Descubre cómo usar Binance Pay para recibir y enviar pagos.</p>
+                            </div>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/MxG3dS7FzTk"
+                                    title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                        </div>
+        
+                        <div class="video-slide">
+                            <div class="text">
+                                <h1>3. ¿Cómo utilizar el mercado P2P en BINANCE?</h1>
+                                <p>Guía sobre cómo comprar y vender en el mercado P2P de BINANCE.</p>
+                            </div>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/BeGIVGbAqU8"
+                                    title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                        </div>
+        
+                        <div class="video-slide">
+                            <div class="text">
+                                <h1>4. ¿Cómo utilizar redes de BLOCKCHAIN en BINANCE?</h1>
+                                <p>Aprende sobre las redes blockchain en Binance.</p>
+                            </div>
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/U-qeq1iV3UE"
+                                    title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <button id="nextBtn">❯</button>
+            </div>
+        </section>
+        <section id="whatsapp">
+            <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank"
+                style="text-decoration:none;">
+                <img src="{% static 'images/social.png' %}" alt="WhatsApp"
+                    style="vertical-align:middle; width:50px; height:50px;">
+                <span style="vertical-align:middle;"></span>
+            </a>
+        </section>
+        
+    </main>
+    
+    <script src="{% static 'academy.js' %}"></script>
+
+    <footer>
+        <p>Puedes ponerte en contacto con nosotros en: <a
+                href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
+            RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
+    </footer>
+</body>
+
+</html>

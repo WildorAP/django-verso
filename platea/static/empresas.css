@@ -1,0 +1,179 @@
+/* Hacer que el body ocupe toda la altura de la pantalla */
+body {
+    height: 100%;
+    margin-top: 0;
+    font-family: 'Monstserrat', sans-serif;
+    /* Ejemplo de Roboto como tipografía */
+    display: flex;
+    flex-direction: column;
+    
+    background-image: url('./images/30756.jpg');
+    /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center;
+    /* Centra la imagen */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    background-attachment: fixed;
+    /* Hace que la imagen de fondo sea fija mientras se desplaza el contenido */
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Añade una capa oscura */
+    background-blend-mode: darken;
+    /* Mezcla el color oscuro con la imagen */
+}
+
+
+
+/* Estilos para el header */
+header {
+
+    
+    display: flex;
+    justify-content: space-between;
+
+    
+    flex-basis: 50%;
+
+
+    background-color: rgba(0, 51, 102, 0.1);/* Azul pastel */
+    color: white;
+    margin-right: 100px;
+
+    text-align: right;
+    position: fixed;
+    width: 100%;
+
+}
+
+#logo {
+    
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+
+
+footer {
+    background-color: rgba(0, 51, 102, 0.1);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 50px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+#empresas {
+    font-size:1rem;
+    color: white;
+}
+
+/* ================= */
+/* 🔹 SECCIÓN EMPRESAS - SIN FONDO BLANCO */
+/* ================= */
+#empresas {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+#empresas p {
+    font-size: 1rem;
+}
+
+#empresas h1 {
+    font-size: 1.5rem;
+}
+
+
+
+
+/* 🔹 Tarjetas de Servicio - TRANSPARENTES */
+.servicio {
+    background: rgba(255, 255, 255, 0.02); /* Transparente con leve opacidad */
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Borde sutil blanco */
+    color: white;
+    padding: 40px 30px; /* Más espacio interno */
+    border-radius: 15px;
+    margin: 50px 0; /* Más espacio entre las tarjetas */
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* 🔹 Imagen dentro de las tarjetas */
+.servicio img {
+    width: 160px; /* Tamaño ligeramente mayor */
+    height: auto;
+    border-radius: 10px;
+    margin-right: 30px; /* Más espacio entre la imagen y el texto */
+}
+
+
+/* 🔹 Contenido de la tarjeta */
+.servicio-texto {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen correctamente */
+}
+
+/* 🔹 Separar más el título del texto */
+.servicio h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px; /* Más espacio entre el título y la descripción */
+}
+
+/* 🔹 Asegurar que la descripción tenga buen espaciado */
+.servicio p {
+    font-size: 1rem;
+    color: #ddd;
+    line-height: 1.6; /* Espaciado entre líneas */
+}
+
+/* 🔹 Efecto Hover - Más opacidad en Hover */
+.servicio:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#whatsapp {
+
+    position: fixed;
+    bottom: 0;
+    /* Se mantendrá en la parte superior */
+    right: 0;
+    /* O puedes poner left: 0 si lo quieres a la izquierda */
+
+    padding: 15px;
+
+    z-index: 1000;
+    /* Asegura que esté encima de otros elementos */
+    width: 50px;
+    /* Ajusta el ancho de la sección fija */
+}
+
+#whatsapp img:hover {
+    transform: scale(1.2);
+    /* Agranda la imagen al 120% al pasar el cursor */
+}   

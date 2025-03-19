@@ -21,3 +21,9 @@ def get_exchange_rate(request):
 
 def render_index(request):
     return render(request, 'index.html')
+
+def academy(request):
+    return render(request, "academy.html")  # Nueva plantilla Academy
+
+def empresas_view(request):
+    return render(request, 'empresas.html')

@@ -5,25 +5,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLATEA HUB</title>
+    <title>VersoTek.io</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="{% static 'images/favicon-32x32.png' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
 </head>
 
 <body>
     <header>
         <div id="logo">
-            <img src="{% static 'images/Sin_título-removebg-preview (1).png' %}" style="width:150px; height:auto;" />
+            <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" style="width:150px; height:auto;" />
 
         </div>
         <div id="barra">
             <nav>
                 <ul>
-                    <li><a href="#home">Nosotros</a></li>
-                    <li><a href="#about">Cambiar</a></li>
-                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="{% url 'empresas' %}">Servicios</a></li>
+                    <li><a href="{% url 'academy' %}">Academy</a></li>
+                    <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!"
+                            target="_blank" style="text-decoration:none;">Contacto</a></li>
+
                 </ul>
             </nav>
         </div>
@@ -33,7 +36,8 @@
         <section id="home">
             <div class="principal">
                 <div class="servicio">
-                    <p>
+                    <p> <strong>BIENVENIDO A VERSO</strong><br><br>
+
                         Brindamos el mejor servicio de <br>compra
                         y venta de stablecoin<br> (USDT, USDC) en Perú.
                     </p>
@@ -136,8 +140,14 @@
                 </div>
             </div>
         </section>
+
+
+
+
+
+
         <section id="whatsapp">
-            <a href="https://wa.me/34612345678?text=Hola%2C%20quiero%20más%20información" target="_blank"
+            <a href="https://wa.me/+51963597658?text=¡Hola%Verso%2C%20quiero%20más%20información!" target="_blank"
                 style="text-decoration:none;">
                 <img src="{% static 'images/social.png' %}" alt="WhatsApp"
                     style="vertical-align:middle; width:50px; height:50px;">
@@ -152,8 +162,9 @@
 
 
     <footer>
-        <p>Puedes ponerte en contacto con nosotros en: <a href="mailto:platehub@correo.com">platehub@correo.com</a><br>
-            RAZÓN SOCIAL: PLATEA HUB S.A.C - RUC: 20612682594<br>Copyright © 2024 PlateaHub</p>
+        <p>Puedes ponerte en contacto con nosotros en: <a
+                href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
+            RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
 
     </footer>
 

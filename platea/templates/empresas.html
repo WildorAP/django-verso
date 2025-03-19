@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VersoTek.io</title>
+    <link rel="stylesheet" href="{% static 'empresas.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <a href="{% url 'principal' %}">
+                <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" style="width:150px; height:auto;">
+            </a>
+        </div>
+        <nav>
+            <ul>
+
+                <li><a href="{% url 'principal' %}">Nosotros</a></li>
+                <li><a href="{% url 'empresas' %}">Servicios</a></li>
+                <li><a href="{% url 'academy' %}">Academy</a></li>
+                <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank"
+                    style="text-decoration:none;">Contacto</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <main>
+            <section id="empresas">
+                <h1>SERVICIOS </h1>
+                <p>Obtén un servicio financiero personalizado para tus stablecoin en USDT, USDC. Si eres una <b>empresa</b> tenemos un servicio especializado para tu equipo. </p>
+
+                <div class="servicio">
+                    <img src="{% static 'images/trader.png' %}" alt="OTC">
+                    <h2>Servicio Over The Counter - OTC</h2>
+                    <p>Si deseas realizar operaciones de gran volumen y a precios competitivos fuera del mercado. </p>
+                </div>
+
+                <div class="servicio">
+                    <img src="{% static 'images/exchange.png' %}" alt="OTC">
+                    <h2>Servicio On-Ramp, Off-Ramp</h2>
+                    <p>Si deseas realizar el cambio a moneda fiat (PEN, USD) de tus USDC,USDT o viceversa.</p>
+                </div>
+
+                <div class="servicio">
+                    <img src="{% static 'images/consulting.png' %}" alt="OTC">
+                    <h2>Consultoria Blockchain</h2>
+                    <p>Si deseas ayuda en tus sistemas SPLAFT, KYC, KYB, legal y contable en Perú (SBS, SUNAT).</p>
+                </div>
+            </section>
+            <section id="whatsapp">
+                <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank"
+                    style="text-decoration:none;">
+                    <img src="{% static 'images/social.png' %}" alt="WhatsApp"
+                        style="vertical-align:middle; width:50px; height:50px;">
+                    <span style="vertical-align:middle;"></span>
+                </a>
+            </section>
+        </main>
+    </main>
+
+    <footer>
+        <p>Puedes ponerte en contacto con nosotros en: <a
+                href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
+            RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
+    </footer>
+</body>
+
+</html>

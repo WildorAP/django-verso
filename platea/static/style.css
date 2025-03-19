@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     
-    background-image: url('./images/3626052.jpg');
+    background-image: url('./images/30756.jpg');
     /* Reemplaza con la ruta de tu imagen */
     background-size: cover;
     /* Asegura que la imagen cubra toda la pantalla */
@@ -17,7 +17,7 @@ body {
     /* Evita que la imagen se repita */
     background-attachment: fixed;
     /* Hace que la imagen de fondo sea fija mientras se desplaza el contenido */
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.3);
     /* Añade una capa oscura */
     background-blend-mode: darken;
     /* Mezcla el color oscuro con la imagen */

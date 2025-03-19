@@ -1,0 +1,212 @@
+/* Hacer que el body ocupe toda la altura de la pantalla */
+body {
+    height: 100%;
+    margin-top: 0;
+    font-family: 'Monstserrat', sans-serif;
+    /* Ejemplo de Roboto como tipografía */
+    display: flex;
+    flex-direction: column;
+    
+    background-image: url('./images/30756.jpg');
+    /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center;
+    /* Centra la imagen */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    background-attachment: fixed;
+    /* Hace que la imagen de fondo sea fija mientras se desplaza el contenido */
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Añade una capa oscura */
+    background-blend-mode: darken;
+    /* Mezcla el color oscuro con la imagen */
+}
+
+
+
+/* Estilos para el header */
+header {
+
+    
+    display: flex;
+    justify-content: space-between;
+
+    
+    flex-basis: 50%;
+
+
+    background-color: rgba(0, 51, 102, 0.1);/* Azul pastel */
+    color: white;
+    margin-right: 100px;
+
+    text-align: right;
+    position: fixed;
+    width: 100%;
+
+}
+
+#logo {
+    
+    margin-left: 50px;
+    margin-top: 5px;
+}
+
+
+
+footer {
+    background-color: rgba(0, 51, 102, 0.1);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+}
+
+
+
+
+
+
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 50px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+#whatsapp {
+
+    position: fixed;
+    bottom: 0;
+    /* Se mantendrá en la parte superior */
+    right: 0;
+    /* O puedes poner left: 0 si lo quieres a la izquierda */
+
+    padding: 15px;
+
+    z-index: 1000;
+    /* Asegura que esté encima de otros elementos */
+    width: 50px;
+    /* Ajusta el ancho de la sección fija */
+}
+
+#whatsapp img:hover {
+    transform: scale(1.2);
+    /* Agranda la imagen al 120% al pasar el cursor */
+}
+
+
+main {
+    margin-top: 100px; /* Asegura que no quede pegado al header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+/* 🔹 Contenedor del carrusel */
+.carousel-container {
+    position: relative;
+    width: 90%;
+    max-width: 1600px;
+    margin: auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+.carousel-wrapper {
+    width: 100%;
+    overflow: hidden;
+}   
+/* 🔹 Ajustamos el tamaño de los videos */
+.video-slide iframe {
+    width: 90%;
+    height: 450px;
+    max-width: 800px;
+    border-radius: 10px;
+}
+
+/* 🔹 Carrusel con videos */
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+/* 🔹 Ajustamos cada slide del carrusel */
+.video-slide {
+    min-width: 100%;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 🔹 Asegurar que los títulos y descripciones estén bien alineados */
+.video-slide h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.video-slide p {
+    font-size: 20px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* 🔹 Botones de navegación MÁS GRANDES */
+#prevBtn, #nextBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 50%;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+#prevBtn { left: 15px; }
+#nextBtn { right: 15px; }
+
+#prevBtn:hover, #nextBtn:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 768px) {
+    .carousel-container {
+        width: 95%;
+    }
+
+    .video-slide iframe {
+        height: 300px;
+    }
+
+    #prevBtn, #nextBtn {
+        font-size: 20px;
+        padding: 10px;
+    }
+}

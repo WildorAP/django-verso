@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%x&_glj03ccoku(w2wtp)#c*9($m%nzfior$k-hxi)_(ud((ia'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -137,7 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-ALLOWED_HOSTS = ['www.plateahub.com', 'plateahub.com','localhost','127.0.0.1','prueba-cusco-production.up.railway.app']
+ALLOWED_HOSTS = ['www.versotek.io', 'versotek.io','localhost','127.0.0.1','prueba-cusco-production.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS =['http://*','https://prueba-cusco-production.up.railway.app']
 
