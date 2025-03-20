@@ -139,5 +139,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ALLOWED_HOSTS = ['www.versotek.io', 'versotek.io','localhost','127.0.0.1','django-verso-production.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS =['http://*','https://prueba-cusco-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS =['http://*','https://django-verso-production.up.railway.app']
 
