@@ -137,7 +137,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-ALLOWED_HOSTS = ['www.versotek.io', 'versotek.io','localhost','127.0.0.1','prueba-cusco-production.up.railway.app']
+ALLOWED_HOSTS = ['www.versotek.io', 'versotek.io','localhost','127.0.0.1','django-verso-production.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS =['http://*','https://prueba-cusco-production.up.railway.app']
 
