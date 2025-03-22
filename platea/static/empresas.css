@@ -214,11 +214,42 @@ nav ul li a {
         display: block;
         /* Muestra el icono hamburguesa */
     }
+
+    #empresas {
+        max-width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+
+    #empresas h1 {
+        font-size: 1.2rem;
+    }
+
+    #empresas p {
+        font-size: 0.9rem;
+    }
+
+    .servicio {
+        flex-direction: column; /* Apilar elementos */
+        text-align: center;
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .servicio img {
+        width: 120px; /* Reducir tamaño de imagen */
+        margin-bottom: 10px;
+    }
+
+    .servicio h2 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .servicio p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
 }  
 
-@media (min-width: 769px) {
-    nav ul {
-        display: flex !important; /* Asegura que el menú normal se vea */
-        gap: 20px;
-    }
-}
+

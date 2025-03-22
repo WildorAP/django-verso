@@ -24,4 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Iniciar correctamente en la posición 0
     updateCarousel();
+
+    window.addEventListener("resize", function () {
+        index = 0; // Resetear índice en caso de cambio de tamaño
+        updateCarousel();
+    });
 });
