@@ -77,6 +77,16 @@ nav ul li a {
     text-decoration: none;
 }
 
+#menu-toggle {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    margin-right: 20px;
+    margin-top: 0px;
+}
+
+
 #empresas {
     font-size:1rem;
     color: white;
@@ -177,3 +187,38 @@ nav ul li a {
     transform: scale(1.2);
     /* Agranda la imagen al 120% al pasar el cursor */
 }   
+
+@media (max-width: 768px) {
+
+    nav ul {
+        display: none;
+        /* Oculta el menú por defecto */
+        flex-direction: column;
+        background: rgba(0, 51, 102, 0.9);
+        position: absolute;
+        top: 17px;
+        right: 20px;
+        width: 100px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    nav ul.show {
+        display: flex;
+        /* Muestra el menú cuando el usuario hace clic */
+    }
+
+    #menu-toggle {
+        display: block;
+        /* Muestra el icono hamburguesa */
+    }
+}  
+
+@media (min-width: 769px) {
+    nav ul {
+        display: flex !important; /* Asegura que el menú normal se vea */
+        gap: 20px;
+    }
+}

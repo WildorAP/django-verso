@@ -6,7 +6,7 @@ body {
     /* Ejemplo de Roboto como tipografía */
     display: flex;
     flex-direction: column;
-    
+
     background-image: url('./images/30756.jpg');
     /* Reemplaza con la ruta de tu imagen */
     background-size: cover;
@@ -28,15 +28,16 @@ body {
 /* Estilos para el header */
 header {
 
-    
+
     display: flex;
     justify-content: space-between;
 
-    
+
     flex-basis: 50%;
 
 
-    background-color: rgba(0, 51, 102, 0.1);/* Azul pastel */
+    background-color: rgba(0, 51, 102, 0.1);
+    /* Azul pastel */
     color: white;
     margin-right: 100px;
 
@@ -47,7 +48,7 @@ header {
 }
 
 #logo {
-    
+
     margin-left: 50px;
     margin-top: 5px;
 }
@@ -57,15 +58,17 @@ header {
     padding-top: 5%;
     padding-left: 7%;
     padding-right: 7%;
-    
-    justify-content: center; /* Centra verticalmente */
-    align-items: center; /* Centra horizontalmente */
+
+    justify-content: center;
+    /* Centra verticalmente */
+    align-items: center;
+    /* Centra horizontalmente */
 
     font-size: 2rem;
     min-height: 70vh;
     gap: 40vh;
-    
-    
+
+
 
 
 }
@@ -73,12 +76,14 @@ header {
 /* Calculadora*/
 
 
-.calculadora p{
+.calculadora p {
     font-size: 0.8rem;
 }
+
 .tipodecambio {
     text-align: center;
 }
+
 .calculator-container {
     background-color: rgba(0, 0, 0, 0.3);
     padding: 20px;
@@ -99,7 +104,8 @@ label {
     margin-bottom: 5px;
 }
 
-input, select {
+input,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -125,7 +131,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    
+
 }
 
 .transaction-options label {
@@ -133,11 +139,12 @@ button:hover {
     font-weight: normal;
     font-size: 1rem;
 }
-.marcas-cotizacion{
+
+.marcas-cotizacion {
     font-size: 1rem;
 }
 
-.USDT input{
+.USDT input {
     width: 93%;
 }
 
@@ -147,6 +154,7 @@ button:hover {
     font-size: 18px;
     color: #FFFFFF;
 }
+
 /* Fin de Calculadora*/
 
 
@@ -217,6 +225,17 @@ section {
 nav ul {
     list-style-type: none;
     padding: 0;
+    
+}
+
+/* Icono del menú hamburguesa */
+#menu-toggle {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    margin-right: 20px;
+    margin-top: 0px;
 }
 
 nav ul li {
@@ -251,13 +270,13 @@ nav ul li a {
 }
 
 .socios {
-    
+
     display: flex;
     justify-content: center;
     gap: 70px;
     text-align: center;
     margin-top: 20%;
-    
+
 }
 
 .socios p {
@@ -265,13 +284,15 @@ nav ul li a {
     color: white;
 
 }
+
 .servicio {
     text-align: center;
-    
+
 }
+
 /* Para pantallas pequeñas, cambia a diseño en una columna */
 @media (max-width: 768px) {
-    
+
 
     .process-gallery {
         flex-direction: column;
@@ -291,34 +312,60 @@ nav ul li a {
         /* Ejemplo de Roboto como tipografía */
         display: flex;
         flex-direction: column;
-        
-        
+
+
         background-color: rgba(0, 0, 0, 0);
         /* Añade una capa oscura */
-       
+
     }
-    
-    
+
+
     #home {
         flex-direction: column;
         align-items: center;
-         justify-content: center;
-        min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+        justify-content: center;
+        min-height: 100vh;
+        /* Asegura que ocupe toda la pantalla */
         margin-top: 15vh;
-        gap:10vh;
+        gap: 10vh;
     }
-   
-    
+
+
     .calculadora {
         flex-basis: auto;
         /* Ocupa todo el ancho en pantallas pequeñas */
         margin-bottom: 20px;
     }
 
+    nav ul {
+        display: none;
+        /* Oculta el menú por defecto */
+        flex-direction: column;
+        background: rgba(0, 51, 102, 0.9);
+        position: absolute;
+        top: 17px;
+        right: 20px;
+        width: 100px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    nav ul.show {
+        display: flex;
+        /* Muestra el menú cuando el usuario hace clic */
+    }
+
+    #menu-toggle {
+        display: block;
+        /* Muestra el icono hamburguesa */
+    }
+
 }
 
-@media (min-width: 768.1px) and (max-width: 1399.98px){
-    
+@media (min-width: 768.1px) and (max-width: 1399.98px) {
+
 
     .process-gallery {
         flex-direction: column;
@@ -330,17 +377,18 @@ nav ul li a {
         /* Ocupa todo el ancho en pantallas pequeñas */
         margin-bottom: 20px;
     }
-    
+
     #home {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+        min-height: 100vh;
+        /* Asegura que ocupe toda la pantalla */
         margin-top: 15vh;
-        gap:10vh;
+        gap: 10vh;
     }
-   
-    
+
+
     .calculadora {
         flex-basis: auto;
         /* Ocupa todo el ancho en pantallas pequeñas */
@@ -348,5 +396,3 @@ nav ul li a {
     }
 
 }
-
-

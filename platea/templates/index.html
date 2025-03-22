@@ -35,7 +35,7 @@
         </div>
         <div id="barra">
             <nav>
-                <ul>
+                <ul id="nav-links">
                     <li><a href="#about">Nosotros</a></li>
                     <li><a href="{% url 'empresas' %}">Servicios</a></li>
                     <li><a href="{% url 'academy' %}">Academy</a></li>
@@ -44,6 +44,11 @@
 
                 </ul>
             </nav>
+        </div>
+
+        <!-- Icono del menú hamburguesa -->
+        <div id="menu-toggle" onclick="toggleMenu()">
+            ☰
         </div>
 
     </header>
@@ -184,6 +189,20 @@
     </footer>
 
     <script src="{% static 'script.js' %}" defer></script>
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var menuToggle = document.getElementById("menu-toggle");
+            var navLinks = document.getElementById("nav-links");
+    
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("show");
+            });
+        });
+    </script>
+    
+
 </body>
 
 </html>

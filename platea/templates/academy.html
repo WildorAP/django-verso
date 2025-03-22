@@ -18,8 +18,7 @@
             </a>
         </div>
         <nav>
-            <ul>
-
+            <ul id="nav-links">
 
                 <li><a href="{% url 'principal' %}">Nosotros</a></li>
                 <li><a href="{% url 'empresas' %}">Servicios</a></li>
@@ -29,6 +28,9 @@
 
             </ul>
         </nav>
+        <div id="menu-toggle" onclick="toggleMenu()">
+            ☰
+        </div>
     </header>
 
     <main>
@@ -95,6 +97,17 @@
                 href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
             RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var menuToggle = document.getElementById("menu-toggle");
+            var navLinks = document.getElementById("nav-links");
+    
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("show");
+            });
+        });
+    </script>
 </body>
 
 </html>

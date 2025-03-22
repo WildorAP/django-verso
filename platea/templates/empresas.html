@@ -17,17 +17,21 @@
                 <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" style="width:150px; height:auto;">
             </a>
         </div>
-        <nav>
-            <ul>
+        <nav id="nav-menu">
+            <ul id="nav-links">
 
                 <li><a href="{% url 'principal' %}">Nosotros</a></li>
                 <li><a href="{% url 'empresas' %}">Servicios</a></li>
                 <li><a href="{% url 'academy' %}">Academy</a></li>
-                <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank"
-                    style="text-decoration:none;">Contacto</a></li>
+                <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!"
+                        target="_blank" style="text-decoration:none;">Contacto</a></li>
 
             </ul>
         </nav>
+
+        <div id="menu-toggle" onclick="toggleMenu()">
+            ☰
+        </div>
     </header>
 
     <main>
@@ -35,7 +39,8 @@
         <main>
             <section id="empresas">
                 <h1>SERVICIOS </h1>
-                <p>Obtén un servicio financiero personalizado para tus stablecoin en USDT, USDC. Si eres una <b>empresa</b> tenemos un servicio especializado para tu equipo. </p>
+                <p>Obtén un servicio financiero personalizado para tus stablecoin en USDT, USDC. Si eres una
+                    <b>empresa</b> tenemos un servicio especializado para tu equipo. </p>
 
                 <div class="servicio">
                     <img src="{% static 'images/trader.png' %}" alt="OTC">
@@ -66,11 +71,26 @@
         </main>
     </main>
 
+
+
     <footer>
         <p>Puedes ponerte en contacto con nosotros en: <a
                 href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
             RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var menuToggle = document.getElementById("menu-toggle");
+            var navLinks = document.getElementById("nav-links");
+    
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("show");
+            });
+        });
+    </script>
+    
 </body>
+
 
 </html>
