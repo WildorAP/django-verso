@@ -218,19 +218,6 @@ main {
 
 /* 🔹 Responsive */
 @media (max-width: 768px) {
-    .carousel-container {
-        width: 95%;
-    }
-
-    .video-slide iframe {
-        height: 300px;
-    }
-
-    #prevBtn,
-    #nextBtn {
-        font-size: 20px;
-        padding: 10px;
-    }
 
     nav ul {
         display: none;
@@ -256,56 +243,59 @@ main {
         display: block;
         /* Muestra el icono hamburguesa */
     }
-
+    /* 📌 Ajuste general de la sección academy */
     #academy {
-        padding: 10px;
-        text-align: center;
+        width: 100%;
+        padding: 20px 0;
     }
 
+    /* 🔹 Contenedor del carrusel */
     .carousel-container {
-        position: relative;
+        width: 95%;
         max-width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 0 auto;
+    }
+
+    /* 🔹 Ajuste del wrapper */
+    .carousel-wrapper {
+        width: 100%;
         overflow: hidden;
     }
 
-    .carousel-wrapper {
-        display: flex;
-        justify-content: center;
-    }
-
-    .carousel {
-        display: flex;
-        flex-direction: row; /* ✅ Se mantiene horizontal */
-        align-items: center;
-        width: 400%; /* ✅ Se ajusta para 4 slides */
-        transition: transform 0.5s ease-in-out;
-    }
-    
-
+    /* 🔹 Cada slide ocupa el 100% del ancho */
     .video-slide {
-        flex: 0 0 100%; /* ✅ Hace que cada video ocupe el 100% del carrusel */
+        min-width: 100%;
         text-align: center;
-    }
-    
-    .video-slide iframe {
-        width: 100%;
-        height: auto; /* ✅ Permite que la altura se ajuste automáticamente */
-        max-height: 300px; /* O cualquier otro valor que prefieras */
+        padding: 15px;
     }
 
+    /* 🔹 Ajuste de los títulos */
     .video-slide h1 {
-        font-size: 1rem;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        padding: 0 10px;
     }
 
     .video-slide p {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        padding: 0 15px;
     }
 
-    
+    /* 📌 SOLUCIÓN: Ajuste del iframe para que no se desborde */
+    .video-slide iframe {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border-radius: 10px;
+    }
 
+    /* 🔹 Ajuste de los botones del carrusel */
     #prevBtn, #nextBtn {
-        font-size: 1.5rem;
-        padding: 5px;
+        font-size: 20px;
+        padding: 8px;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -313,6 +303,8 @@ main {
         color: white;
         border: none;
         cursor: pointer;
+        z-index: 10;
+        border-radius: 50%;
     }
 
     #prevBtn {
@@ -322,4 +314,5 @@ main {
     #nextBtn {
         right: 5px;
     }
+   
 }
