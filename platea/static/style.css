@@ -364,35 +364,3 @@ nav ul li a {
 
 }
 
-@media (min-width: 768.1px) and (max-width: 1399.98px) {
-
-
-    .process-gallery {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .process-item {
-        flex-basis: 100%;
-        /* Ocupa todo el ancho en pantallas pequeñas */
-        margin-bottom: 20px;
-    }
-
-    #home {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        /* Asegura que ocupe toda la pantalla */
-        margin-top: 15vh;
-        gap: 10vh;
-    }
-
-
-    .calculadora {
-        flex-basis: auto;
-        /* Ocupa todo el ancho en pantallas pequeñas */
-        margin-bottom: 20px;
-    }
-
-}
