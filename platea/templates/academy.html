@@ -1,7 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
 
+
+{% block content %}
 <head>
 
     <meta property="og:title" content="Compra y venta de stablecoin en Perú">
@@ -25,29 +26,7 @@
     <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
 </head>
 
-<body>
-    <header>
-        <div id="logo">
-            <a href="{% url 'principal' %}">
-                <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" style="width:150px; height:auto;">
-            </a>
-        </div>
-        <nav>
-            <ul id="nav-links">
-
-                <li><a href="{% url 'principal' %}">Nosotros</a></li>
-                <li><a href="{% url 'empresas' %}">Servicios</a></li>
-                <li><a href="{% url 'academy' %}">Academy</a></li>
-                <li><a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank"
-                    style="text-decoration:none;">Contacto</a></li>
-
-            </ul>
-        </nav>
-        <div id="menu-toggle" onclick="toggleMenu()">
-            ☰
-        </div>
-    </header>
-
+<section>
     <main>
         <section id="academy">
             <div class="carousel-container">
@@ -94,24 +73,13 @@
                 <button id="nextBtn">❯</button>
             </div>
         </section>
-        <section id="whatsapp">
-            <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank"
-                style="text-decoration:none;">
-                <img src="{% static 'images/social.png' %}" alt="WhatsApp"
-                    style="vertical-align:middle; width:50px; height:50px;">
-                <span style="vertical-align:middle;"></span>
-            </a>
-        </section>
+       
         
     </main>
     
     <script src="{% static 'academy.js' %}"></script>
 
-    <footer>
-        <p>Puedes ponerte en contacto con nosotros en: <a
-                href="mailto:versotecnologia@gmail.com">versotecnologia@gmail.com</a><br>
-            RAZÓN SOCIAL: VERSO TECHNOLOGY S.A.C.<br>Copyright © 2025 Verso Technology</p>
-    </footer>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -123,6 +91,6 @@
             });
         });
     </script>
-</body>
+</section>
 
-</html>
+{% endblock %}

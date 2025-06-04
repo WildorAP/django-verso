@@ -2,10 +2,10 @@
 body {
     height: 100%;
     margin-top: 0;
-    font-family: 'Monstserrat', sans-serif;
+    
     /* Ejemplo de Roboto como tipografía */
-    display: flex;
-    flex-direction: column;
+    
+    
 
     background-image: url('./images/30756.jpg');
     /* Reemplaza con la ruta de tu imagen */
@@ -25,33 +25,7 @@ body {
 
 
 
-/* Estilos para el header */
-header {
 
-
-    display: flex;
-    justify-content: space-between;
-
-
-    flex-basis: 50%;
-
-
-    background-color: rgba(0, 51, 102, 0.1);
-    /* Azul pastel */
-    color: white;
-    margin-right: 100px;
-
-    text-align: right;
-    position: fixed;
-    width: 100%;
-
-}
-
-#logo {
-
-    margin-left: 50px;
-    margin-top: 5px;
-}
 
 #home {
     display: flex;
@@ -89,9 +63,22 @@ header {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 40vh;
+    width: 50vh;
 }
 
+.calculator-container label,
+.calculator-container input,
+.calculator-container select {
+    font-size: 0.95rem; /* Más equilibrado */
+}
+
+.calculator-container h2 {
+    font-size: 1.3rem; /* Un poco más sobrio */
+}
+
+.result h2 {
+    font-size: 0.85rem;
+}
 
 
 form div {
@@ -201,14 +188,6 @@ button:hover {
     color: white;
 }
 
-/* Estilos para el footer */
-footer {
-    background-color: rgba(0, 51, 102, 0.1);
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 0.8rem;
-}
 
 
 
@@ -238,10 +217,7 @@ nav ul {
     margin-top: 0px;
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 50px;
-}
+
 
 nav ul li a {
     color: white;
@@ -289,6 +265,8 @@ nav ul li a {
     text-align: center;
 
 }
+
+
 
 /* Para pantallas pequeñas, cambia a diseño en una columna */
 @media (max-width: 768px) {

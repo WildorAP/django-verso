@@ -1,0 +1,147 @@
+body {
+    background-color: #0a1128;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.registro-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+}
+
+.dashboard-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #0f172a;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+.registro-box {
+    background-color: #1e293b;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.registro-titulo {
+    color: #38bdf8;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #f1f5f9;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+/* Estilos para los campos select */
+select {
+    background-color: #fff !important;
+    color: #333 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    width: 100% !important;
+}
+
+select option {
+    background-color: #fff !important;
+    color: #333 !important;
+    padding: 8px !important;
+}
+
+/* Estilos para el campo de contraseña */
+.password-field-container {
+    position: relative;
+    margin-bottom: 15px;
+    display: block;
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #fff !important;
+    z-index: 2;
+    font-size: 1.2em;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #38bdf8 !important;
+}
+
+/* Ajuste para el input de contraseña */
+.password-field-container input[type="password"],
+.password-field-container input[type="text"] {
+    padding-right: 40px !important;
+    width: 100% !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid #334155 !important;
+    color: #ffffff !important;
+}
+
+.btn-realizar-cambio {
+    width: 100%;
+    padding: 10px;
+    background-color: #22c55e;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.btn-realizar-cambio:hover {
+    background-color: #16a34a;
+}
+
+.enlace-login {
+    color: #60a5fa;
+    text-align: center;
+    display: block;
+}
+
+.alerta-errores {
+    background-color: #7f1d1d;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.9rem;
+}
+
+.icono-wsp {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}

@@ -1,0 +1,942 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/login.css' %}" rel="stylesheet">
+<link href="{% static 'css/perfil_nuevo.css' %}" rel="stylesheet">
+<link href="{% static 'css/transaccion_nuevo.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    /* Estilos para mensajes de error */
+    .error-message {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        color: #dc3545;
+    }
+
+    .password-field {
+        position: relative;
+    }
+
+    .password-field .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+    }
+
+    .password-field .toggle-password:hover {
+        color: #495057;
+    }
+
+    .password-field input {
+        padding-right: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="profile-wrapper">
+    <div class="profile-container">
+        <div class="sidebar">
+            <a href="?seccion=personal" class="nav-link {% if seccion == 'personal' %}active{% endif %}">
+                <i class="fas fa-user"></i> Datos personales
+            </a>
+            <a href="?seccion=financiera" class="nav-link {% if seccion == 'financiera' %}active{% endif %}">
+                <i class="fas fa-wallet"></i> Información financiera
+            </a>
+            <a href="?seccion=seguridad" class="nav-link {% if seccion == 'seguridad' %}active{% endif %}">
+                <i class="fas fa-shield-alt"></i> Seguridad
+            </a>
+        </div>
+
+        <div class="content">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if seccion == 'personal' %}
+            <div class="content-card">
+                <h2><i class="fas fa-user"></i> Datos Personales</h2>
+                {% if modo == 'edicion' %}
+                <form method="post" class="edit-form">
+                    {% csrf_token %}
+                    {% for field in form_personal %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="error-message">
+                            {{ field.errors|join:", " }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="button-group">
+                        <button type="submit" name="editar_perfil" class="btn-success">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                        <a href="?seccion=personal" class="btn-success">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+                {% else %}
+                <div class="info-display">
+                    <div class="info-row">
+                        <div class="info-label">Nombre</div>
+                        <div class="info-value">{{ perfil.nombre }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Apellidos</div>
+                        <div class="info-value">{{ perfil.apellidos }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Correo electrónico</div>
+                        <div class="info-value">{{ user.email }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Tipo de Documento</div>
+                        <div class="info-value">{{ perfil.get_tipo_documento_display }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Documento de Identidad</div>
+                        <div class="info-value">{{ perfil.documento_identidad }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Celular</div>
+                        <div class="info-value">{{ perfil.celular }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Nacionalidad</div>
+                        <div class="info-value">{{ perfil.get_nacionalidad_display }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Estado Civil</div>
+                        <div class="info-value">{{ perfil.get_estado_civil_display }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Ocupación</div>
+                        <div class="info-value">{{ perfil.ocupacion }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">¿Es PEP?</div>
+                        <div class="info-value">{{ perfil.es_pep|yesno:"Sí,No" }}</div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <a href="?seccion=personal&modo=edicion" class="btn-success">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% elif seccion == 'financiera' %}
+            <div class="content-card">
+                <h2><i class="fas fa-university"></i> Cuentas Bancarias</h2>
+                <div class="info-display">
+                    {% if cuentas_bancarias %}
+                        {% for cuenta in cuentas_bancarias %}
+                        <div class="info-row">
+                            <div class="info-label">{{ cuenta.get_banco_display }}</div>
+                            <div class="info-value">
+                                <div>{{ cuenta.numero_cuenta }}</div>
+                                {% if cuenta.cci %}<div class="mt-1">CCI: {{ cuenta.cci }}</div>{% endif %}
+                                <div class="mt-1">{{ cuenta.get_moneda_display }} - {{ cuenta.get_tipo_cuenta_display }}
+                                    {% if cuenta.alias %} - {{ cuenta.alias }}{% endif %}</div>
+                                {% if modo == 'edicion' %}
+                                <div class="mt-2">
+                                    <button type="button" class="btn-outline-primary btn-sm"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEditarCuenta"
+                                            data-cuenta-id="{{ cuenta.id }}"
+                                            data-banco="{{ cuenta.banco }}"
+                                            data-numero="{{ cuenta.numero_cuenta }}"
+                                            data-cci="{{ cuenta.cci|default:'' }}"
+                                            data-moneda="{{ cuenta.moneda }}"
+                                            data-tipo="{{ cuenta.tipo_cuenta }}"
+                                            data-alias="{{ cuenta.alias|default:'' }}">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn-outline-danger btn-sm ml-2" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarCuenta"
+                                            data-cuenta-id="{{ cuenta.id }}"
+                                            data-banco="{{ cuenta.get_banco_display }}"
+                                            data-numero="{{ cuenta.numero_cuenta }}"
+                                            data-moneda="{{ cuenta.get_moneda_display }}"
+                                            data-alias="{{ cuenta.alias|default:'' }}">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="info-row">
+                            <div class="info-value text-center">No hay cuentas registradas.</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarCuenta">
+                        <i class="fas fa-plus"></i> Agregar cuenta
+                    </button>
+                    {% if modo == 'edicion' %}
+                    <a href="?seccion=financiera" class="btn-success">
+                        <i class="fas fa-check"></i> Terminar edición
+                    </a>
+                    {% else %}
+                    <a href="?seccion=financiera&modo=edicion" class="btn-success">
+                        <i class="fas fa-edit"></i> Editar cuentas
+                    </a>
+                    {% endif %}
+                </div>
+
+                <h2 class="mt-4"><i class="fas fa-wallet"></i> Wallets</h2>
+                <div class="info-display">
+                    {% if wallets %}
+                        {% for wallet in wallets %}
+                        <div class="info-row">
+                            <div class="info-label">{{ wallet.get_moneda_display }}</div>
+                            <div class="info-value">
+                                <div>{{ wallet.direccion }}</div>
+                                <div class="mt-1">Red: {{ wallet.get_red_display }}
+                                    {% if wallet.alias %} - {{ wallet.alias }}{% endif %}</div>
+                                {% if modo == 'edicion' %}
+                                <div class="mt-2">
+                                    <button type="button" class="btn-outline-primary btn-sm"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEditarWallet"
+                                            data-wallet-id="{{ wallet.id }}"
+                                            data-moneda="{{ wallet.moneda }}"
+                                            data-direccion="{{ wallet.direccion }}"
+                                            data-red="{{ wallet.red }}"
+                                            data-alias="{{ wallet.alias|default:'' }}">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn-outline-danger btn-sm ml-2" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEliminarWallet"
+                                            data-wallet-id="{{ wallet.id }}"
+                                            data-moneda="{{ wallet.get_moneda_display }}"
+                                            data-direccion="{{ wallet.direccion }}"
+                                            data-red="{{ wallet.get_red_display }}"
+                                            data-alias="{{ wallet.alias|default:'' }}">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="info-row">
+                            <div class="info-value text-center">No hay wallets registradas.</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarWallet">
+                        <i class="fas fa-plus"></i> Agregar wallet
+                    </button>
+                    {% if modo == 'edicion' %}
+                    <a href="?seccion=financiera" class="btn-success">
+                        <i class="fas fa-check"></i> Terminar edición
+                    </a>
+                    {% else %}
+                    <a href="?seccion=financiera&modo=edicion" class="btn-success">
+                        <i class="fas fa-edit"></i> Editar wallets
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% elif seccion == 'seguridad' %}
+            <div class="content-card">
+                <h2><i class="fas fa-shield-alt"></i> Seguridad</h2>
+                <div class="info-display">
+                    <div class="info-row">
+                        <div class="info-label">Cambio de Contraseña</div>
+                        <div class="info-value">
+                            <p>Para cambiar tu contraseña, primero deberás verificar tu identidad mediante un código enviado a tu correo electrónico.</p>
+                            <div class="mt-2">
+                                <button type="button" class="btn-success" data-bs-toggle="modal" data-bs-target="#modalSolicitudCodigo">
+                                    <i class="fas fa-key"></i> Cambiar contraseña
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Modal Agregar Cuenta Bancaria -->
+<div class="modal fade" id="modalAgregarCuenta" tabindex="-1" aria-labelledby="modalAgregarCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarCuentaLabel">
+                    <i class="fas fa-university"></i> Agregar Nueva Cuenta Bancaria
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><i class="fas fa-building-columns"></i> Banco</label>
+                        {{ form_cuenta.banco }}
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-credit-card"></i> Número de Cuenta</label>
+                            {{ form_cuenta.numero_cuenta }}
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-key"></i> CCI</label>
+                            {{ form_cuenta.cci }}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-coins"></i> Moneda</label>
+                            {{ form_cuenta.moneda }}
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-list"></i> Tipo de Cuenta</label>
+                            {{ form_cuenta.tipo_cuenta }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
+                        {{ form_cuenta.alias }}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" name="agregar_cuenta" class="btn-realizar-cambio">
+                            <i class="fas fa-plus"></i> Agregar Cuenta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Wallet -->
+<div class="modal fade" id="modalAgregarWallet" tabindex="-1" aria-labelledby="modalAgregarWalletLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarWalletLabel">
+                    <i class="fas fa-wallet"></i> Agregar Nueva Wallet
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><i class="fas fa-coins"></i> Moneda</label>
+                        {{ form_wallet.moneda }}
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-network-wired"></i> Red</label>
+                        {{ form_wallet.red }}
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-fingerprint"></i> Dirección de Wallet</label>
+                        {{ form_wallet.direccion }}
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
+                        {{ form_wallet.alias }}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" name="agregar_wallet" class="btn-realizar-cambio">
+                            <i class="fas fa-plus"></i> Agregar Wallet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Cuenta Bancaria -->
+<div class="modal fade" id="modalEditarCuenta" tabindex="-1" aria-labelledby="modalEditarCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarCuentaLabel">
+                    <i class="fas fa-edit"></i> Editar Cuenta Bancaria
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" id="formEditarCuenta">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><i class="fas fa-building-columns"></i> Banco</label>
+                        <select name="banco" id="edit-cuenta-banco" class="form-control" required>
+                            {% for value, label in form_cuenta.fields.banco.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-credit-card"></i> Número de Cuenta</label>
+                        <input type="text" name="numero_cuenta" id="edit-cuenta-numero" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-key"></i> CCI</label>
+                        <input type="text" name="cci" id="edit-cuenta-cci" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-coins"></i> Moneda</label>
+                        <select name="moneda" id="edit-cuenta-moneda" class="form-control" required>
+                            {% for value, label in form_cuenta.fields.moneda.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-list"></i> Tipo de Cuenta</label>
+                        <select name="tipo_cuenta" id="edit-cuenta-tipo" class="form-control" required>
+                            {% for value, label in form_cuenta.fields.tipo_cuenta.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
+                        <input type="text" name="alias" id="edit-cuenta-alias" class="form-control">
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-success">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Wallet -->
+<div class="modal fade" id="modalEditarWallet" tabindex="-1" aria-labelledby="modalEditarWalletLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarWalletLabel">
+                    <i class="fas fa-edit"></i> Editar Wallet
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="" id="formEditarWallet">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><i class="fas fa-coins"></i> Moneda</label>
+                        <select name="moneda" id="edit-wallet-moneda" class="form-control" required>
+                            {% for value, label in form_wallet.fields.moneda.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-network-wired"></i> Red</label>
+                        <select name="red" id="edit-wallet-red" class="form-control" required>
+                            {% for value, label in form_wallet.fields.red.choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-fingerprint"></i> Dirección de Wallet</label>
+                        <input type="text" name="direccion" id="edit-wallet-direccion" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
+                        <input type="text" name="alias" id="edit-wallet-alias" class="form-control">
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-success">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Cuenta Bancaria -->
+<div class="modal fade" id="modalEliminarCuenta" tabindex="-1" aria-labelledby="modalEliminarCuentaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarCuentaLabel">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> 
+                    Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-content">
+                    <p>¿Estás seguro que deseas eliminar esta cuenta bancaria?</p>
+                    
+                    <div class="item-details">
+                        <p><strong>Banco:</strong> <span id="cuenta-banco"></span></p>
+                        <p><strong>Número de cuenta:</strong> <span id="cuenta-numero"></span></p>
+                        <p><strong>Moneda:</strong> <span id="cuenta-moneda"></span></p>
+                        <p class="cuenta-alias-container" style="display: none;">
+                            <strong>Alias:</strong> <span id="cuenta-alias"></span>
+                        </p>
+                    </div>
+                    
+                    <div class="warning-message">
+                        <p><i class="fas fa-info-circle"></i> Esta acción no se puede deshacer.</p>
+                    </div>
+
+                    <form method="post" action="" id="formEliminarCuenta">
+                        {% csrf_token %}
+                        <div class="confirmation-actions">
+                            <button type="submit" class="btn-danger">
+                                <i class="fas fa-trash"></i> Sí, eliminar
+                            </button>
+                            <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Wallet -->
+<div class="modal fade" id="modalEliminarWallet" tabindex="-1" aria-labelledby="modalEliminarWalletLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEliminarWalletLabel">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> 
+                    Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="confirmation-content">
+                    <p>¿Estás seguro que deseas eliminar esta wallet?</p>
+                    
+                    <div class="item-details">
+                        <p><strong>Moneda:</strong> <span id="wallet-moneda"></span></p>
+                        <p><strong>Dirección:</strong> <span id="wallet-direccion"></span></p>
+                        <p><strong>Red:</strong> <span id="wallet-red"></span></p>
+                        <p class="wallet-alias-container" style="display: none;">
+                            <strong>Alias:</strong> <span id="wallet-alias"></span>
+                        </p>
+                    </div>
+                    
+                    <div class="warning-message">
+                        <p><i class="fas fa-info-circle"></i> Esta acción no se puede deshacer.</p>
+                    </div>
+
+                    <form method="post" action="" id="formEliminarWallet">
+                        {% csrf_token %}
+                        <div class="confirmation-actions">
+                            <button type="submit" class="btn-danger">
+                                <i class="fas fa-trash"></i> Sí, eliminar
+                            </button>
+                            <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Solicitud Código -->
+<div class="modal fade" id="modalSolicitudCodigo" tabindex="-1" aria-labelledby="modalSolicitudCodigoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSolicitudCodigoLabel">
+                    <i class="fas fa-envelope"></i> Solicitar Código de Verificación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Te enviaremos un código de verificación a tu correo electrónico registrado.</p>
+                <form method="post" id="formSolicitarCodigo">
+                    {% csrf_token %}
+                    <input type="hidden" name="solicitar_codigo" value="1">
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-success" id="btnSolicitarCodigo">
+                            <i class="fas fa-paper-plane"></i> Solicitar código
+                        </button>
+                        <button type="button" class="btn-success" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Verificar Código -->
+<div class="modal fade" id="modalVerificarCodigo" tabindex="-1" aria-labelledby="modalVerificarCodigoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVerificarCodigoLabel">
+                    <i class="fas fa-check-circle"></i> Verificar Código
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Ingresa el código de verificación que hemos enviado a tu correo electrónico.</p>
+                <form method="post" id="formVerificarCodigo">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="codigo_verificacion">Código de verificación</label>
+                        <input type="text" name="codigo_verificacion" id="codigo_verificacion" class="form-control" required>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-success">
+                            <i class="fas fa-check"></i> Verificar código
+                        </button>
+                        <button type="button" class="btn-success" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cambiar Contraseña -->
+<div class="modal fade" id="modalCambiarPassword" tabindex="-1" aria-labelledby="modalCambiarPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCambiarPasswordLabel">
+                    <i class="fas fa-key"></i> Cambiar Contraseña
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formCambiarPassword">
+                    {% csrf_token %}
+                    <input type="hidden" name="cambiar_password" value="1">
+                    <div class="form-group">
+                        <label for="new_password1">Nueva contraseña</label>
+                        <div class="password-field">
+                            <input type="password" name="new_password1" id="new_password1" class="form-control" required>
+                            <i class="fas fa-eye toggle-password" data-target="new_password1"></i>
+                        </div>
+                        <small class="form-text text-muted">La contraseña debe tener al menos 8 caracteres.</small>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="new_password2">Confirmar nueva contraseña</label>
+                        <div class="password-field">
+                            <input type="password" name="new_password2" id="new_password2" class="form-control" required>
+                            <i class="fas fa-eye toggle-password" data-target="new_password2"></i>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn-success">
+                            <i class="fas fa-save"></i> Guardar contraseña
+                        </button>
+                        <button type="button" class="btn-success" data-bs-dismiss="modal">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="whatsapp">
+    <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank">
+        <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+    </a>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal Eliminar Cuenta
+    const modalEliminarCuenta = document.getElementById('modalEliminarCuenta');
+    if (modalEliminarCuenta) {
+        modalEliminarCuenta.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const cuentaId = button.getAttribute('data-cuenta-id');
+            const banco = button.getAttribute('data-banco');
+            const numero = button.getAttribute('data-numero');
+            const moneda = button.getAttribute('data-moneda');
+            const alias = button.getAttribute('data-alias');
+            
+            document.getElementById('cuenta-banco').textContent = banco;
+            document.getElementById('cuenta-numero').textContent = numero;
+            document.getElementById('cuenta-moneda').textContent = moneda;
+            
+            const aliasContainer = modalEliminarCuenta.querySelector('.cuenta-alias-container');
+            if (alias) {
+                document.getElementById('cuenta-alias').textContent = alias;
+                aliasContainer.style.display = 'block';
+            } else {
+                aliasContainer.style.display = 'none';
+            }
+            
+            const form = document.getElementById('formEliminarCuenta');
+            form.action = `/usuarios/cuenta/eliminar/${cuentaId}/`;
+        });
+    }
+
+    // Modal Eliminar Wallet
+    const modalEliminarWallet = document.getElementById('modalEliminarWallet');
+    if (modalEliminarWallet) {
+        modalEliminarWallet.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const walletId = button.getAttribute('data-wallet-id');
+            const moneda = button.getAttribute('data-moneda');
+            const direccion = button.getAttribute('data-direccion');
+            const red = button.getAttribute('data-red');
+            const alias = button.getAttribute('data-alias');
+            
+            document.getElementById('wallet-moneda').textContent = moneda;
+            document.getElementById('wallet-direccion').textContent = direccion;
+            document.getElementById('wallet-red').textContent = red;
+            
+            const aliasContainer = modalEliminarWallet.querySelector('.wallet-alias-container');
+            if (alias) {
+                document.getElementById('wallet-alias').textContent = alias;
+                aliasContainer.style.display = 'block';
+            } else {
+                aliasContainer.style.display = 'none';
+            }
+            
+            const form = document.getElementById('formEliminarWallet');
+            form.action = `/usuarios/wallet/eliminar/${walletId}/`;
+        });
+    }
+
+    // Modal Editar Cuenta
+    const modalEditarCuenta = document.getElementById('modalEditarCuenta');
+    if (modalEditarCuenta) {
+        modalEditarCuenta.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const cuentaId = button.getAttribute('data-cuenta-id');
+            
+            // Establecer los valores actuales en el formulario
+            document.getElementById('edit-cuenta-banco').value = button.getAttribute('data-banco');
+            document.getElementById('edit-cuenta-numero').value = button.getAttribute('data-numero');
+            document.getElementById('edit-cuenta-cci').value = button.getAttribute('data-cci');
+            document.getElementById('edit-cuenta-moneda').value = button.getAttribute('data-moneda');
+            document.getElementById('edit-cuenta-tipo').value = button.getAttribute('data-tipo');
+            document.getElementById('edit-cuenta-alias').value = button.getAttribute('data-alias');
+            
+            // Establecer la URL de acción del formulario
+            const form = document.getElementById('formEditarCuenta');
+            form.action = `/usuarios/cuenta/editar/${cuentaId}/`;
+        });
+    }
+
+    // Modal Editar Wallet
+    const modalEditarWallet = document.getElementById('modalEditarWallet');
+    if (modalEditarWallet) {
+        modalEditarWallet.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const walletId = button.getAttribute('data-wallet-id');
+            
+            // Establecer los valores actuales en el formulario
+            document.getElementById('edit-wallet-moneda').value = button.getAttribute('data-moneda');
+            document.getElementById('edit-wallet-red').value = button.getAttribute('data-red');
+            document.getElementById('edit-wallet-direccion').value = button.getAttribute('data-direccion');
+            document.getElementById('edit-wallet-alias').value = button.getAttribute('data-alias');
+            
+            // Establecer la URL de acción del formulario
+            const form = document.getElementById('formEditarWallet');
+            form.action = `/usuarios/wallet/editar/${walletId}/`;
+        });
+    }
+
+    // Manejo del formulario de solicitud de código
+    const formSolicitarCodigo = document.getElementById('formSolicitarCodigo');
+    if (formSolicitarCodigo) {
+        formSolicitarCodigo.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btnSolicitar = document.getElementById('btnSolicitarCodigo');
+            btnSolicitar.disabled = true;
+            btnSolicitar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            fetch(window.location.pathname, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cerrar modal actual y abrir el de verificación
+                    bootstrap.Modal.getInstance(document.getElementById('modalSolicitudCodigo')).hide();
+                    new bootstrap.Modal(document.getElementById('modalVerificarCodigo')).show();
+                } else {
+                    alert(data.error || 'Hubo un error al enviar el código.');
+                }
+            })
+            .catch(error => {
+                alert('Hubo un error al procesar tu solicitud.');
+            })
+            .finally(() => {
+                btnSolicitar.disabled = false;
+                btnSolicitar.innerHTML = '<i class="fas fa-paper-plane"></i> Solicitar código';
+            });
+        });
+    }
+
+    // Manejo del formulario de verificación de código
+    const formVerificarCodigo = document.getElementById('formVerificarCodigo');
+    if (formVerificarCodigo) {
+        formVerificarCodigo.addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetch(window.location.pathname, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cerrar modal actual y abrir el de cambio de contraseña
+                    bootstrap.Modal.getInstance(document.getElementById('modalVerificarCodigo')).hide();
+                    new bootstrap.Modal(document.getElementById('modalCambiarPassword')).show();
+                } else {
+                    alert(data.error || 'Código inválido.');
+                }
+            })
+            .catch(error => {
+                alert('Hubo un error al verificar el código.');
+            });
+        });
+    }
+
+    // Manejo del formulario de cambio de contraseña
+    const formCambiarPassword = document.getElementById('formCambiarPassword');
+    if (formCambiarPassword) {
+        formCambiarPassword.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Limpiar mensajes de error previos
+            this.querySelectorAll('.error-message').forEach(el => el.remove());
+            
+            fetch(window.location.pathname, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Contraseña actualizada exitosamente.');
+                    bootstrap.Modal.getInstance(document.getElementById('modalCambiarPassword')).hide();
+                    window.location.reload();
+                } else {
+                    // Mostrar errores específicos para cada campo
+                    if (data.errors) {
+                        Object.entries(data.errors).forEach(([field, error]) => {
+                            const input = this.querySelector(`[name="${field}"]`);
+                            if (input) {
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'error-message text-danger mt-1';
+                                errorDiv.textContent = error;
+                                input.parentElement.appendChild(errorDiv);
+                            }
+                        });
+                    } else {
+                        alert('Error al cambiar la contraseña. Por favor, verifica los datos ingresados.');
+                    }
+                }
+            })
+            .catch(error => {
+                alert('Hubo un error al cambiar la contraseña. Por favor, intenta nuevamente.');
+            });
+        });
+    }
+
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

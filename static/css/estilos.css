@@ -1,0 +1,96 @@
+body {
+    background-color: #0a1128;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* NAVBAR con transparencia */
+.navbar {
+    background-color: rgba(30, 41, 59, 0.5) !important; /* #1e293b con transparencia */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px); /* efecto cristalino */
+}
+
+.navbar .nav-link {
+    color: #e2e8f0 !important;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar .nav-link:hover {
+    color: #38bdf8 !important;
+}
+
+.navbar-brand img {
+    max-height: 50px;
+}
+
+/* CONTAINER padding top */
+.container {
+    padding-top: 8px;
+}
+
+/* FOOTER con transparencia y efecto */
+footer {
+    background-color: rgba(30, 41, 59, 0.5); /* semi-transparente */
+    backdrop-filter: blur(6px);
+    color: #f1f5f9;
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+    margin-top: 40px;
+    border-top: 1px solid #334155;
+    border-radius: 12px 12px 0 0;
+}
+
+footer a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* WhatsApp botón flotante */
+#whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+#whatsapp img {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+}
+
+#whatsapp img:hover {
+    transform: scale(1.15);
+}
+
+/* ALERTAS Bootstrap personalizadas */
+.alert {
+    border-radius: 8px;
+    background-color: rgba(30, 41, 59, 0.9);
+    color: #f8fafc;
+    border: 1px solid #334155;
+}
+
+/* Botón cerrar sesión dentro del form */
+form.d-inline .btn.nav-link {
+    background: none;
+    border: none;
+    
+    color: #e2e8f0;
+    font-weight: 500;
+    
+}
+
+form.d-inline .btn.nav-link:hover {
+    color: #38bdf8;
+    cursor: pointer;
+}

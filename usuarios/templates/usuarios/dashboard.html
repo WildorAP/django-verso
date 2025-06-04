@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load usuarios_extras %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/platea_dashboard.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section id="dashboard">
+    <div class="dashboard-container">
+        <div class="calculadora-container">
+            <h2><i class="fas fa-calculator"></i> Cotización</h2>
+            <div class="calculator-content">
+                <div class="tasas-actuales">
+                    <h3><i class="fas fa-chart-line"></i> Tasas actuales</h3>
+                    <div class="table-responsive">
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th>Par de Monedas</th>
+                                    <th>Compra</th>
+                                    <th>Venta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for key, value in tasas.items %}
+                                {% with origen_destino=key|split:'_' %}
+                                <tr>
+                                    <td>{{ origen_destino.0 }} → {{ origen_destino.1 }}</td>
+                                    <td>{{ value.compra|floatformat:4 }}</td>
+                                    <td>{{ value.venta|floatformat:4 }}</td>
+                                </tr>
+                                {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="calculadora-form">
+                    <div class="mb-3">
+                        <button type="button" id="btn-compra" class="btn-outline-primary">
+                            <i class="fas fa-shopping-cart"></i> Quiero Comprar
+                        </button>
+                        <button type="button" id="btn-venta" class="btn-outline-secondary">
+                            <i class="fas fa-dollar-sign"></i> Quiero Vender
+                        </button>
+                    </div>
+                    <input type="hidden" id="tipo_operacion" name="tipo_operacion" value="venta">
+                    
+                    <form id="calculadoraForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Monto a convertir</label>
+                            <input type="number" id="monto" name="monto" value="{{ monto }}" step="0.01" min="0">
+                            <div id="error_monto" class="text-danger mt-1"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-column">
+                                <label>De</label>
+                                <select id="moneda_origen" name="moneda_origen">
+                                    <option value="USDT" {% if moneda_origen == 'USDT' %}selected{% endif %}>USDT</option>
+                                    <option value="USDC" {% if moneda_origen == 'USDC' %}selected{% endif %}>USDC</option>
+                                    <option value="PEN" {% if moneda_origen == 'PEN' %}selected{% endif %}>PEN</option>
+                                    <option value="USD" {% if moneda_origen == 'USD' %}selected{% endif %}>USD</option>
+                                </select>
+                            </div>
+                            <div class="form-column">
+                                <label>A</label>
+                                <select id="moneda_destino" name="moneda_destino">
+                                    <!-- Se llenará por JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="resultado-box">
+                            <div class="resultado-flex">
+                                <div>
+                                    <h3>Resultado</h3>
+                                    <p>
+                                        <span id="monto_origen">{{ monto }}</span>
+                                        <span id="label_origen">{{ moneda_origen }}</span> =
+                                        <strong>
+                                            <span id="monto_convertido">{{ monto_convertido|floatformat:2 }}</span>
+                                            <span id="label_destino">{{ moneda_destino }}</span>
+                                        </strong>
+                                    </p>
+                                    <p class="tasa-detalle text-info" id="resumen_operacion"></p>
+                                    <p class="tasa-detalle" id="tasa_linea_detalle">
+                                        Tasa: 1 <span id="tasa_origen">--</span> =
+                                        <span id="tasa_valor">--</span>
+                                        <span id="tasa_destino">--</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <a id="realizar-cambio-btn" class="btn-realizar-cambio" href="{% url 'usuarios:nueva_transaccion' %}">
+                                        <i class="fas fa-exchange-alt"></i> Realizar cambio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="historial-container">
+            <h3><i class="fas fa-history"></i> Historial Reciente</h3>
+
+            {% if transacciones %}
+            <div class="table-responsive">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Moneda Origen</th>
+                            <th>Cantidad</th>
+                            <th>Moneda Destino</th>
+                            <th>Resultado</th>
+                            <th>Tasa</th>
+                            <th>Estado</th>
+                            <th>Constancia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaccion in transacciones %}
+                        <tr>
+                            <td>{{ transaccion.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                            <td>{{ transaccion.get_tipo_operacion_display }}</td>
+                            <td>{{ transaccion.moneda_origen }}</td>
+                            <td>{{ transaccion.cantidad_origen }}</td>
+                            <td>{{ transaccion.moneda_destino }}</td>
+                            <td>{{ transaccion.cantidad_destino }}</td>
+                            <td>{{ transaccion.tasa_cambio|floatformat:4 }}</td>
+                            <td>
+                                {% if transaccion.estado == "PENDIENTE" %}
+                                <span class="badge badge-warning">Pendiente</span>
+                                {% elif transaccion.estado == "COMPLETADA" %}
+                                <span class="badge badge-success">Completada</span>
+                                {% elif transaccion.estado == "FACTURADA" %}
+                                <span class="badge badge-dark">Facturada</span>
+                                {% elif transaccion.estado == "RECHAZADO" %}
+                                <span class="badge badge-danger">Rechazado</span>
+                                {% else %}
+                                <span class="badge badge-secondary">{{ transaccion.estado }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if transaccion.constancia_archivo %}
+                                <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                    data-target="#modalConstancia{{ transaccion.id }}">
+                                    <i class="fas fa-file-alt"></i> Ver
+                                </button>
+                                {% else %}
+                                <span class="text-muted">No disponible</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Paginación -->
+                <div class="pagination-container">
+                    <nav aria-label="Navegación de páginas">
+                        <ul class="pagination justify-content-center">
+                            {% if transacciones.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" aria-label="Primera">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ transacciones.previous_page_number }}" aria-label="Anterior">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Página {{ transacciones.number }} de {{ transacciones.paginator.num_pages }}
+                                </span>
+                            </li>
+
+                            {% if transacciones.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ transacciones.next_page_number }}" aria-label="Siguiente">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ transacciones.paginator.num_pages }}" aria-label="Última">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-data">Aún no tienes transacciones registradas.</p>
+            {% endif %}
+        </div>
+
+        <div id="tasas-data" data-tasas='{{ tasas_json|safe }}'></div>
+
+        {% for transaccion in transacciones %}
+        {% if transaccion.constancia_archivo %}
+        <div class="modal fade" id="modalConstancia{{ transaccion.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="modalLabel{{ transaccion.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel{{ transaccion.id }}">
+                            <i class="fas fa-file-alt"></i> Vista de Constancia
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <iframe src="{{ transaccion.constancia_archivo.url }}"
+                            style="width: 100%; height: 500px; display: block;" frameborder="0"
+                            onerror="this.style.display='none'; document.getElementById('img-{{ transaccion.id }}').style.display='block';">
+                        </iframe>
+                        <img id="img-{{ transaccion.id }}" src="{{ transaccion.constancia_archivo.url }}"
+                            style="max-height: 500px; display: none;" class="img-fluid rounded mt-2" alt="Constancia">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ transaccion.constancia_archivo.url }}" download class="btn btn-info">
+                            <i class="fas fa-download"></i> Descargar
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<section id="whatsapp">
+    <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank">
+        <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+    </a>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

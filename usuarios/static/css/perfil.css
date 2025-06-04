@@ -1,0 +1,194 @@
+body {
+  background-color: #0d1117;
+  color: #e6edf3;
+}
+
+.sidebar {
+  background-color: #161b22;
+  height: 100vh;
+  padding: 2rem 1rem;
+  border-right: 1px solid #30363d;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #c9d1d9;
+  font-weight: bold;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar a:hover {
+  background-color: #21262d;
+}
+
+.sidebar a.active {
+  background-color: #21262d;
+  border-left: 4px solid #58a6ff;
+}
+
+.card {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.card p,
+.card strong,
+.card label {
+  color: #e6edf3; /* texto claro sobre fondo oscuro */
+}
+.card h4,
+.card h5 {
+  color: #58a6ff;
+}
+
+.btn-primary {
+  background-color: #238636;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #2ea043;
+}
+
+.btn-outline-primary {
+  color: #58a6ff;
+  border-color: #58a6ff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #58a6ff;
+  color: #0d1117;
+}
+
+.btn-outline-danger {
+  color: #f85149;
+  border-color: #f85149;
+}
+
+.btn-outline-danger:hover {
+  background-color: #f85149;
+  color: #0d1117;
+}
+
+.btn-success {
+  background-color: #238636;
+  border-color: #238636;
+}
+
+.btn-success:hover {
+  background-color: #2ea043;
+}
+
+.btn-secondary {
+  background-color: #30363d;
+  border-color: #30363d;
+  color: #c9d1d9;
+}
+
+.btn-secondary:hover {
+  background-color: #484f58;
+}
+
+form.mt-3.border.p-3.bg-light.rounded p {
+  color: #e6edf3; /* texto blanco/clarito */
+}
+
+form.mt-3.border.p-3.bg-light.rounded {
+  background-color: #161b22 !important; /* fondo oscuro */
+  border-color: #30363d !important;
+}
+
+/* Layout principal */
+.perfil-container {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    margin-top: 80px; /* Espacio para separar del NAV */
+    min-height: calc(100vh - 80px); /* Altura mínima considerando el espacio del nav */
+}
+
+/* Sidebar de navegación */
+.perfil-nav {
+    flex: 0 0 300px; /* Ancho fijo del sidebar */
+    background-color: #1e293b;
+    border-radius: 15px;
+    padding: 1.5rem;
+    height: fit-content;
+}
+
+.perfil-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.perfil-nav-item:hover,
+.perfil-nav-item.active {
+    background-color: #2d3748;
+    color: #38bdf8;
+}
+
+.perfil-nav-item i {
+    font-size: 1.2rem;
+}
+
+/* Contenido principal */
+.perfil-content {
+    flex: 1;
+    background-color: #1e293b;
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.perfil-section-title {
+    color: #38bdf8;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Campos de información */
+.campo-info {
+    margin-bottom: 1.5rem;
+}
+
+.campo-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.campo-valor {
+    color: #e2e8f0;
+    font-size: 1rem;
+    padding: 0.75rem;
+    background-color: #2d3748;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .perfil-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .perfil-nav {
+        flex: none;
+        width: 100%;
+    }
+}

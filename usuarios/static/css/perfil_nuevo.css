@@ -1,0 +1,425 @@
+/* Estilos generales */
+body {
+    background-color: #0a1128;
+    color: #ffffff;
+}
+
+.profile-wrapper {
+    padding: 80px 20px 20px 20px; /* Agregamos padding-top para separar del NAV */
+    min-height: 100vh;
+    
+}
+
+.profile-container {
+    display: flex;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 0 0 250px;
+    background-color: #1e293b;
+    border-radius: 15px;
+    padding: 20px;
+    height: fit-content;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: #2d3748;
+    color: #38bdf8;
+}
+
+.nav-link i {
+    font-size: 1.2em;
+}
+
+/* Contenido principal */
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.content-card {
+    background-color: #1e293b;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 80px; /* Espacio para los botones */
+}
+
+.content-card h2 {
+    color: #38bdf8;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5em;
+}
+
+/* Estilos para la información del perfil y financiera */
+.info-display {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: #1e293b;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.info-row {
+    background-color: #2d3748;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.info-row:hover {
+    background-color: #374151;
+    transform: translateY(-2px);
+}
+
+.info-label {
+    color: #94a3b8;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #e2e8f0;
+    font-size: 1.1em;
+    padding: 8px 12px;
+    background-color: rgba(45, 55, 72, 0.5);
+    border-radius: 6px;
+    word-break: break-word;
+}
+
+/* Botones de acción en modo edición */
+.btn-outline-primary,
+.btn-outline-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-outline-primary {
+    color: #38bdf8;
+    border: 1px solid #38bdf8;
+}
+
+.btn-outline-danger {
+    color: #ef4444;
+    border: 1px solid #ef4444;
+}
+
+.btn-outline-primary:hover {
+    background-color: #38bdf8;
+    color: #0a1128;
+}
+
+.btn-outline-danger:hover {
+    background-color: #ef4444;
+    color: #0a1128;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.85em;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+.mt-1 {
+    margin-top: 0.25rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+/* Botones de acción principales */
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
+.btn-success {
+    background-color: #10b981;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    min-width: 160px;
+    justify-content: center;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #4b5563;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #374151;
+    transform: translateY(-2px);
+}
+
+/* Estilos para el formulario de edición */
+.edit-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: #1e293b;
+    border-radius: 15px;
+}
+
+.form-group {
+    background-color: #2d3748;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.form-group:hover {
+    background-color: #374151;
+}
+
+.form-group label {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: #1e293b;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #38bdf8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+/* Estilos específicos para los selectores */
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group select option {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    padding: 8px;
+}
+
+/* Mantener los botones al final y centrados */
+.edit-form .button-group {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* Estilos para mensajes de ayuda y errores */
+.help-text {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.8em;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.error-message {
+    display: block;
+    color: #ef4444;
+    font-size: 0.85em;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* Ajuste para los campos requeridos */
+.form-group label.required::after {
+    content: "*";
+    color: #ef4444;
+    margin-left: 4px;
+}
+
+/* Ajuste para los campos con error */
+.form-group.has-error input,
+.form-group.has-error select {
+    border-color: #ef4444;
+}
+
+.form-group.has-error label {
+    color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        flex: none;
+        width: 100%;
+    }
+
+    .info-display {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        padding: 0 20px;
+    }
+    
+    .button-group button,
+    .button-group a {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .content-card {
+        padding-bottom: 120px; /* Más espacio para botones apilados */
+    }
+}
+
+/* Estilos para la página de confirmación de eliminación */
+.confirmation-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.confirmation-card h2 {
+    color: #f59e0b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.confirmation-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.item-details {
+    background-color: #2d3748;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.item-details p {
+    margin: 10px 0;
+    color: #e2e8f0;
+}
+
+.item-details strong {
+    color: #94a3b8;
+    margin-right: 10px;
+}
+
+.warning-message {
+    color: #f59e0b;
+    margin: 20px 0;
+    font-size: 0.9em;
+}
+
+.warning-message i {
+    margin-right: 5px;
+}
+
+.confirmation-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+}
+
+.text-warning {
+    color: #f59e0b;
+}
+
+/* Ajuste para los botones en modo edición */
+.confirmation-actions .btn-success,
+.modal-body .btn-success {
+    min-width: 140px;
+} 

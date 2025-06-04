@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/login.css' %}" rel="stylesheet">
+<link href="{% static 'css/perfil_nuevo.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section class="profile-wrapper">
+    <div class="content-card confirmation-card">
+        <h2>
+            <i class="fas fa-exclamation-triangle text-warning"></i> 
+            Confirmar Eliminación
+        </h2>
+        
+        <div class="confirmation-content">
+            <p>¿Estás seguro que deseas eliminar esta {% if tipo == 'cuenta' %}cuenta bancaria{% else %}wallet{% endif %}?</p>
+            
+            {% if tipo == 'cuenta' %}
+            <div class="item-details">
+                <p><strong>Banco:</strong> {{ objeto.get_banco_display }}</p>
+                <p><strong>Número de cuenta:</strong> {{ objeto.numero_cuenta }}</p>
+                <p><strong>Moneda:</strong> {{ objeto.get_moneda_display }}</p>
+                {% if objeto.alias %}
+                <p><strong>Alias:</strong> {{ objeto.alias }}</p>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="item-details">
+                <p><strong>Moneda:</strong> {{ objeto.get_moneda_display }}</p>
+                <p><strong>Dirección:</strong> {{ objeto.direccion }}</p>
+                <p><strong>Red:</strong> {{ objeto.get_red_display }}</p>
+                {% if objeto.alias %}
+                <p><strong>Alias:</strong> {{ objeto.alias }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <div class="warning-message">
+                <p><i class="fas fa-info-circle"></i> Esta acción no se puede deshacer.</p>
+            </div>
+
+            <form method="post" class="confirmation-actions">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">
+                    <i class="fas fa-trash"></i> Sí, eliminar
+                </button>
+                <a href="{% url 'usuarios:perfil_usuario' %}?seccion=financiera&modo=edicion" class="btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %} 

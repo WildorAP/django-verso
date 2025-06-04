@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .codigo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .nota {
+            font-size: 14px;
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Código de Verificación</h2>
+        <p>Has solicitado cambiar tu contraseña. Para continuar con el proceso, utiliza el siguiente código de verificación:</p>
+        
+        <div class="codigo">
+            {{ codigo }}
+        </div>
+        
+        <p>Este código expirará en 15 minutos por razones de seguridad.</p>
+        
+        <div class="nota">
+            <p>Si no has solicitado cambiar tu contraseña, por favor ignora este correo.</p>
+            <p>No compartas este código con nadie.</p>
+        </div>
+    </div>
+</body>
+</html> 
