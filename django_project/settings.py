@@ -25,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%x&_glj03ccoku(w2wtp)#c*9($m%nzfior$k-hxi)_(ud((ia'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-default-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 
 
@@ -43,8 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'platea',
+    'usuarios.apps.UsuariosConfig',
    
 ]
+
+# Redirecciones de autenticación
+
+LOGIN_REDIRECT_URL = 'usuarios:dashboard'
+LOGOUT_REDIRECT_URL = 'principal'
+LOGIN_URL = 'usuarios:login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'usuarios.middlewares.VerificarInformacionFinancieraMiddleware',
     
 ]
 
@@ -63,7 +71,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
@@ -131,7 +139,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'platea/static')
+    BASE_DIR / 'static'  
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -142,3 +150,16 @@ ALLOWED_HOSTS = ['www.versotek.io', 'versotek.io','localhost','127.0.0.1','djang
 
 CSRF_TRUSTED_ORIGINS =['http://*','https://django-verso-production.up.railway.app',"https://www.versotek.io"]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Configuración de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'wildorapaza95@gmail.com'  # Reemplaza con tu correo
+EMAIL_HOST_PASSWORD = 'indq hsni qasw arhw'  # Reemplaza con tu contraseña de aplicación
+DEFAULT_FROM_EMAIL = 'wildorapaza95@gmail.com'  # Reemplaza con tu correo

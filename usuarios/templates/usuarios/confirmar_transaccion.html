@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/transaccion_nuevo.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section id="confirmar-transaccion">
+    <div class="dashboard-container">
+        <h2><i class="fas fa-check-circle"></i> Confirmar Transacción</h2>
+        <p class="text-center text-muted mb-4">Revisa los detalles y sube tu constancia de envío.</p>
+
+        <div class="calculadora-container">
+            <h4><i class="fas fa-info-circle"></i> Detalles de la Transacción</h4>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Moneda de origen</label>
+                    <input type="text" class="form-control" value="{{ transaccion.moneda_origen }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad enviada</label>
+                    <input type="text" class="form-control" value="{{ transaccion.cantidad_origen }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Moneda de destino</label>
+                    <input type="text" class="form-control" value="{{ transaccion.moneda_destino }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad a recibir</label>
+                    <input type="text" class="form-control" value="{{ transaccion.cantidad_destino }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tasa aplicada</label>
+                <input type="text" class="form-control" value="{{ transaccion.tasa_cambio|floatformat:4 }}" readonly>
+            </div>
+
+            {% if wallet_usuario %}
+            <div class="wallet-line">
+                <p><i class="fas fa-wallet"></i> <strong>Wallet del cliente:</strong> {{ wallet_usuario.get_red_display }} - {{wallet_usuario.direccion }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="calculadora-container">
+            {% if transaccion.tipo_operacion == 'CRYPTO_TO_FIAT' %}
+            <div class="alert-custom">
+                <h5><i class="fas fa-exchange-alt"></i> Instrucciones para Envío de Cripto</h5>
+                <p>Envía <strong>{{ transaccion.cantidad_origen }} {{ transaccion.moneda_origen }}</strong> a:</p>
+                {% if wallet_direccion %}
+                <div class="wallet-code">
+                    <span id="direccionWallet">{{ wallet_direccion }}</span>
+                    <button type="button" class="btn btn-sm btn-outline-light" onclick="copiarWallet()">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <p><strong>Red:</strong> {{ wallet_red }}</p>
+                {% else %}
+                <div class="text-danger">⚠️ Dirección no disponible. Contacta a soporte.</div>
+                {% endif %}
+            </div>
+            {% elif cuenta_empresa %}
+            <div class="alert-custom">
+                <h5><i class="fas fa-university"></i> Instrucciones para Depósito Bancario</h5>
+                <p>Transfiere <strong>{{ transaccion.cantidad_origen }} {{ transaccion.moneda_origen }}</strong> a:</p>
+                <div class="bg-dark text-white p-3 rounded">
+                    <p><i class="fas fa-building-columns"></i> <strong>Banco:</strong> {{ cuenta_empresa.get_banco_display }}</p>
+                    <p><i class="fas fa-user"></i> <strong>Titular:</strong> {{ cuenta_empresa.titular }}</p>
+                    <p>
+                        <i class="fas fa-credit-card"></i> <strong>Número de Cuenta:</strong>
+                        <span id="cuentaEmpresa">{{ cuenta_empresa.numero_cuenta }}</span>
+                        <button onclick="copiarTexto('cuentaEmpresa')" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-copy"></i> Copiar
+                        </button>
+                    </p>
+                    <p>
+                        <i class="fas fa-key"></i> <strong>CCI:</strong>
+                        <span id="cciEmpresa">{{ cuenta_empresa.cci }}</span>
+                        <button onclick="copiarTexto('cciEmpresa')" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-copy"></i> Copiar
+                        </button>
+                    </p>
+                </div>
+                <p class="mt-2">Luego sube tu constancia de depósito.</p>
+            </div>
+            {% else %}
+            <div class="text-danger">⚠️ Cuenta bancaria no disponible. Contacta a soporte.</div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" id="form-confirmar" class="mt-4">
+                {% csrf_token %}
+
+                {% if error_constancia %}
+                <div class="alert alert-danger">{{ error_constancia }}</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="constancia_archivo">
+                        <i class="fas fa-file-upload"></i> Constancia de envío (PDF, JPG, PNG)
+                    </label>
+                    <input type="file" name="constancia_archivo" id="constancia_archivo" class="form-control-file" required>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn-realizar-cambio">
+                        {% if transaccion.tipo_operacion == 'CRYPTO_TO_FIAT' %}
+                        <i class="fas fa-check"></i> Confirmar Envío
+                        {% else %}
+                        <i class="fas fa-check"></i> Confirmar Depósito
+                        {% endif %}
+                    </button>
+                    <a href="{% url 'usuarios:dashboard' %}" class="btn-outline-light">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section id="whatsapp">
+    <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank">
+        <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+    </a>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form-confirmar');
+        const archivoInput = document.getElementById('constancia_archivo');
+
+        form.addEventListener('submit', function (event) {
+            const archivo = archivoInput.files[0];
+            const tiposPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+
+            if (!archivo) {
+                alert('Por favor, sube tu constancia.');
+                event.preventDefault();
+                return;
+            }
+
+            if (!tiposPermitidos.includes(archivo.type)) {
+                alert('Solo se permiten PDF, JPG o PNG.');
+                event.preventDefault();
+            }
+        });
+    });
+
+    function copiarWallet() {
+        const direccion = document.getElementById('direccionWallet').innerText;
+        navigator.clipboard.writeText(direccion).then(function () {
+            alert('📋 Dirección copiada al portapapeles.');
+        }).catch(function (err) {
+            alert('Error al copiar: ' + err);
+        });
+    }
+
+    function copiarTexto(id) {
+        const texto = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(texto).then(() => {
+            alert('📋 Texto copiado: ' + texto);
+        }).catch(err => {
+            alert('❌ No se pudo copiar: ' + err);
+        });
+    }
+</script>
+{% endblock %}

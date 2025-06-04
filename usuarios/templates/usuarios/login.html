@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="login-wrapper">
+    <div class="login-card">
+        <h2>Iniciar Sesión</h2>
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-iniciar-sesion">Iniciar sesión</button>    
+        </form>
+        <div class="links-container" style="text-align: center; margin-top: 10px;">
+            <p>
+                <a href="{% url 'usuarios:registro' %}" class="link-registro">¿No tienes cuenta? Regístrate</a>
+            </p>
+            <p>
+                <a href="{% url 'usuarios:recuperar_password' %}" class="link-registro">¿Olvidaste tu contraseña?</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="registro-wrapper">
+    <main class="dashboard-container">
+        <section class="registro-box">
+            <h2 class="registro-titulo">Formulario de registro</h2>
+            
+            <form method="post" class="form-group">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {% if field.name == 'password' or field.name == 'password_confirm' %}
+                            <div class="password-field-container">
+                                {{ field }}
+                                <i class="fas fa-eye password-toggle" onclick="togglePassword(this)" style="color: #fff;"></i>
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn-realizar-cambio">Registrarse</button>
+            </form>
+
+            <p style="margin-top: 15px;">
+                <a href="{% url 'usuarios:login' %}" class="enlace-login">¿Ya tienes cuenta? Iniciar sesión</a>
+            </p>
+        </section>
+    </main>
+
+    <section id="whatsapp">
+        <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank">
+            <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+        </a>
+    </section>
+
+    {% if form.errors %}
+    <div class="alerta-errores">
+        <h4>Tu contraseña debe cumplir los siguientes criterios:</h4>
+        <ul>
+            {% for field in form %}
+            {% for error in field.errors %}
+            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(icon) {
+    const input = icon.parentElement.querySelector('input');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}

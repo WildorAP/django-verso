@@ -1,0 +1,88 @@
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\forms.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\forms.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\forms.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\django_project\settings.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\forms.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO Watching for file changes with StatReloader
+WARNING Not Found: /script.js
+WARNING Method Not Allowed (GET): /usuarios/logout/
+WARNING Method Not Allowed: /usuarios/logout/
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'qqqqq', 'apellidos': 'qqqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '888888888', 'celular': '777777777', 'email': 'w@gmail.com', 'email_confirm': 'w@gmail.com', 'password': '12345678', 'password_confirm': '12345678', 'nacionalidad': 'uruguay', 'estado_civil': 'viudo', 'ocupacion': 'wwww', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x00000230F41C65A0>, 'id': None, 'user_id': 11, 'nombre': 'qqqqq', 'apellidos': 'qqqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '888888888', 'celular': '777777777', 'nacionalidad': 'uruguay', 'estado_civil': 'viudo', 'ocupacion': 'wwww', 'es_pep': True}
+ERROR Error al guardar: duplicate key value violates unique constraint "usuarios_perfil_user_id_key"
+DETAIL:  Key (user_id)=(11) already exists.
+
+ERROR Formulario inválido. Errores: <ul class="errorlist"><li>email<ul class="errorlist"><li>Este correo ya está registrado.</li></ul></li><li>email_confirm<ul class="errorlist"><li>Las direcciones de correo electrónico no coinciden.</li></ul></li></ul>
+ERROR Formulario inválido. Errores: <ul class="errorlist"><li>email<ul class="errorlist"><li>Este correo ya está registrado.</li></ul></li><li>email_confirm<ul class="errorlist"><li>Las direcciones de correo electrónico no coinciden.</li></ul></li></ul>
+INFO Formulario válido. Datos limpios: {'nombre': 'qqqqq', 'apellidos': 'qqqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '888888888', 'celular': '6742445', 'email': 'wk@gmail.com', 'email_confirm': 'wk@gmail.com', 'password': 'ajedres_123', 'password_confirm': 'ajedres_123', 'nacionalidad': 'uruguay', 'estado_civil': 'viudo', 'ocupacion': 'wwww', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x00000230F4659280>, 'id': None, 'user_id': 12, 'nombre': 'qqqqq', 'apellidos': 'qqqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '888888888', 'celular': '6742445', 'nacionalidad': 'uruguay', 'estado_civil': 'viudo', 'ocupacion': 'wwww', 'es_pep': True}
+ERROR Error al guardar: duplicate key value violates unique constraint "usuarios_perfil_user_id_key"
+DETAIL:  Key (user_id)=(12) already exists.
+
+ERROR Formulario inválido. Errores: <ul class="errorlist"><li>email<ul class="errorlist"><li>Este correo ya está registrado.</li></ul></li><li>email_confirm<ul class="errorlist"><li>Las direcciones de correo electrónico no coinciden.</li></ul></li></ul>
+WARNING Not Found: /script.js
+INFO Watching for file changes with StatReloader
+WARNING Forbidden (CSRF token from POST incorrect.): /usuarios/registro/
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'martin', 'apellidos': 'quispe', 'tipo_documento': 'dni', 'documento_identidad': '8888888', 'celular': '99999999', 'email': 'martin@gmail.com', 'email_confirm': 'martin@gmail.com', 'password': 'martin1234', 'password_confirm': 'martin1234', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'Martin', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x0000023D0A1888F0>, 'id': None, 'user_id': 13, 'nombre': 'martin', 'apellidos': 'quispe', 'tipo_documento': 'dni', 'documento_identidad': '8888888', 'celular': '99999999', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'Martin', 'es_pep': True}
+ERROR Error al guardar: duplicate key value violates unique constraint "usuarios_perfil_user_id_key"
+DETAIL:  Key (user_id)=(13) already exists.
+
+WARNING Not Found: /script.js
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\forms.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO Watching for file changes with StatReloader
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'pablo', 'apellidos': 'marmalol', 'tipo_documento': 'dni', 'documento_identidad': '8754535', 'celular': '4546', 'email': 'pablomarmol@gmail.com', 'email_confirm': 'pablomarmol@gmail.com', 'password': 'pablo123', 'password_confirm': 'pablo123', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'sosfta', 'es_pep': 'si'}
+INFO Cleaned data en save(): {'nombre': 'pablo', 'apellidos': 'marmalol', 'tipo_documento': 'dni', 'documento_identidad': '8754535', 'celular': '4546', 'email': 'pablomarmol@gmail.com', 'email_confirm': 'pablomarmol@gmail.com', 'password': 'pablo123', 'password_confirm': 'pablo123', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'sosfta', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x000002275B20D1C0>, 'id': None, 'user_id': 14, 'nombre': 'pablo', 'apellidos': 'marmalol', 'tipo_documento': 'dni', 'documento_identidad': '8754535', 'celular': '4546', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'sosfta', 'es_pep': True}
+ERROR Error al guardar: duplicate key value violates unique constraint "usuarios_perfil_user_id_key"
+DETAIL:  Key (user_id)=(14) already exists.
+
+WARNING Not Found: /favicon.ico
+INFO Watching for file changes with StatReloader
+WARNING Not Found: /script.js
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'qqqqq', 'apellidos': 'qqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '222222', 'celular': '333333333', 'email': 'r@gmail.com', 'email_confirm': 'r@gmail.com', 'password': 'ajedres12345', 'password_confirm': 'ajedres12345', 'nacionalidad': 'republica_dominicana', 'estado_civil': 'casado', 'ocupacion': 'aaaa', 'es_pep': 'si'}
+INFO Cleaned data en save(): {'nombre': 'qqqqq', 'apellidos': 'qqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '222222', 'celular': '333333333', 'email': 'r@gmail.com', 'email_confirm': 'r@gmail.com', 'password': 'ajedres12345', 'password_confirm': 'ajedres12345', 'nacionalidad': 'republica_dominicana', 'estado_civil': 'casado', 'ocupacion': 'aaaa', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x0000013899DC0590>, 'id': 23, 'user_id': 15, 'nombre': 'qqqqq', 'apellidos': 'qqqqqqqq', 'tipo_documento': 'dni', 'documento_identidad': '222222', 'celular': '333333333', 'nacionalidad': 'republica_dominicana', 'estado_civil': 'casado', 'ocupacion': 'aaaa', 'es_pep': True}
+INFO Perfil guardado para el usuario: r@gmail.com
+ERROR Error al guardar: Reverse for 'home' not found. 'home' is not a valid view function or pattern name.
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\signals.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\signals.py changed, reloading.
+INFO Watching for file changes with StatReloader
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'bbbbbbbbb', 'apellidos': 'wggggg', 'tipo_documento': 'dni', 'documento_identidad': '8754535', 'celular': '4546', 'email': 'QWpablomarmol@gmail.com', 'email_confirm': 'QWpablomarmol@gmail.com', 'password': 'pablo1234', 'password_confirm': 'pablo1234', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'aaa', 'es_pep': 'si'}
+INFO Cleaned data en save(): {'nombre': 'bbbbbbbbb', 'apellidos': 'wggggg', 'tipo_documento': 'dni', 'documento_identidad': '8754535', 'celular': '4546', 'email': 'QWpablomarmol@gmail.com', 'email_confirm': 'QWpablomarmol@gmail.com', 'password': 'pablo1234', 'password_confirm': 'pablo1234', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'aaa', 'es_pep': 'si'}
+ERROR Error al guardar: User has no perfil.
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\signals.py changed, reloading.
+INFO Watching for file changes with StatReloader
+WARNING Forbidden (CSRF token from POST incorrect.): /usuarios/registro/
+WARNING Forbidden (CSRF token from POST incorrect.): /usuarios/registro/
+ERROR Formulario inválido. Errores: <ul class="errorlist"><li>email<ul class="errorlist"><li>Este correo ya está registrado.</li></ul></li><li>email_confirm<ul class="errorlist"><li>Las direcciones de correo electrónico no coinciden.</li></ul></li></ul>
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\usuarios\signals.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO Watching for file changes with StatReloader
+WARNING Not Found: /script.js
+WARNING Not Found: /script.js
+INFO Formulario válido. Datos limpios: {'nombre': 'Esteban', 'apellidos': 'Apaza', 'tipo_documento': 'dni', 'documento_identidad': '73605723', 'celular': '33344444', 'email': 'MAS@gmail.com', 'email_confirm': 'MAS@gmail.com', 'password': 'esteban890', 'password_confirm': 'esteban890', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'ing', 'es_pep': 'si'}
+INFO Cleaned data en save(): {'nombre': 'Esteban', 'apellidos': 'Apaza', 'tipo_documento': 'dni', 'documento_identidad': '73605723', 'celular': '33344444', 'email': 'MAS@gmail.com', 'email_confirm': 'MAS@gmail.com', 'password': 'esteban890', 'password_confirm': 'esteban890', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'ing', 'es_pep': 'si'}
+INFO Datos del perfil antes de guardar: {'_state': <django.db.models.base.ModelState object at 0x0000025D2F103920>, 'id': 24, 'user_id': 17, 'nombre': 'Esteban', 'apellidos': 'Apaza', 'tipo_documento': 'dni', 'documento_identidad': '73605723', 'celular': '33344444', 'nacionalidad': 'peru', 'estado_civil': 'soltero', 'ocupacion': 'ing', 'es_pep': True}
+INFO Perfil guardado para el usuario: MAS@gmail.com
+ERROR Error al guardar: Reverse for 'home' not found. 'home' is not a valid view function or pattern name.
+INFO C:\Users\WILDOR\Documents\VERSO PAGINA\DJANGO_RAIL\django_project\settings.py changed, reloading.

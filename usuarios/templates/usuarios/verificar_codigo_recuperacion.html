@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="login-wrapper">
+    <div class="login-card">
+        <h2>Verificar Código</h2>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <p class="text-center mb-4">
+            Te hemos enviado un código de verificación a tu correo electrónico.
+            Por favor, ingresa el código a continuación.
+        </p>
+        
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="codigo">Código de verificación</label>
+                <input type="text" name="codigo" id="codigo" class="form-control" required maxlength="6">
+            </div>
+            <button type="submit" class="btn-iniciar-sesion">Verificar código</button>
+        </form>
+        
+        <div class="links-container" style="text-align: center; margin-top: 10px;">
+            <p>
+                <a href="{% url 'usuarios:recuperar_password' %}" class="link-registro">Solicitar nuevo código</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %} 

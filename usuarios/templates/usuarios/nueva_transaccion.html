@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load usuarios_extras %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/transaccion_nuevo.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section id="nueva-transaccion">
+    <div class="dashboard-container">
+        <h2><i class="fas fa-exchange-alt"></i> Nueva Transacción</h2>
+
+        {% if errores %}
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                {% for error in errores %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="calculadora-container">
+                <h4><i class="fas fa-calculator"></i> Detalles de Cotización</h4>
+
+                <div class="form-group">
+                    <label>Monto</label>
+                    <input type="text" name="monto" class="form-control" value="{{ monto }}" readonly>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Moneda Origen</label>
+                        <input type="text" name="moneda_origen" class="form-control" value="{{ moneda_origen }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Moneda Destino</label>
+                        <input type="text" name="moneda_destino" class="form-control" value="{{ moneda_destino }}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Resultado</label>
+                    <input type="text" class="form-control" value="{{ monto_convertido|floatformat:2 }} {{ moneda_destino }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tasa</label>
+                    <input type="text" class="form-control" value="{{ tasa|floatformat:4 }}" readonly>
+                </div>
+            </div>
+
+            <div class="calculadora-container">
+                <h4><i class="fas fa-wallet"></i> Información Financiera</h4>
+
+                {% if tipo_operacion == 'FIAT_TO_CRYPTO' %}
+                <div class="form-group">
+                    <label><i class="fas fa-wallet"></i> Seleccionar tu wallet donde deseas que te depositemos</label>
+                    <select name="wallet_id_destino" class="form-control" required>
+                        <option value="">-- Selecciona una wallet --</option>
+                        {% for wallet in wallets %}
+                        <option value="{{ wallet.id }}">
+                            {{ wallet.get_red_display }} - {{ wallet.direccion }}{% if wallet.alias %} - {{wallet.alias}}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-university"></i> Seleccionar la cuenta bancaria desde donde realizaste el depósito</label>
+                    <select name="cuenta_id" class="form-control" required>
+                        <option value="">-- Selecciona tu cuenta bancaria --</option>
+                        {% for cuenta in cuentas %}
+                        <option value="{{ cuenta.id }}">
+                            {{ cuenta.get_banco_display }} - {{ cuenta.numero_cuenta }}
+                            ({{ cuenta.get_moneda_display }}, {{ cuenta.get_tipo_cuenta_display }}){% if cuenta.alias %} - {{ cuenta.alias }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-building-columns"></i> Seleccionar nuestra cuenta donde realizarás el depósito</label>
+                    <select name="cuenta_empresa_id" class="form-control" required>
+                        <option value="">-- Selecciona una cuenta --</option>
+                        {% for cuenta in cuentas_empresa %}
+                        <option value="{{ cuenta.id }}">
+                            {{ cuenta.get_banco_display }} - {{ cuenta.numero_cuenta }} ({{cuenta.get_moneda_display}}){% if cuenta.alias %} - {{ cuenta.alias }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% else %}
+                <div class="form-group">
+                    <label><i class="fas fa-wallet"></i> Selecciona tu wallet desde la que enviarás:</label>
+                    <select name="wallet_id_envio" class="form-control" required>
+                        <option value="">-- Selecciona una wallet --</option>
+                        {% for w in wallets %}
+                        <option value="{{ w.id }}">
+                            {{ w.alias|default:"(Sin alias)" }} - {{ w.get_red_display }} - {{ w.direccion }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-university"></i> Seleccionar tu cuenta bancaria donde deseas que depositemos:</label>
+                    <select name="cuenta_id" class="form-control" required>
+                        <option value="">-- Selecciona una cuenta --</option>
+                        {% for cuenta in cuentas %}
+                        <option value="{{ cuenta.id }}">
+                            {{ cuenta.get_banco_display }} - {{ cuenta.numero_cuenta }}
+                            ({{ cuenta.get_moneda_display }}, {{ cuenta.get_tipo_cuenta_display }}){% if cuenta.alias %} - {{ cuenta.alias }}{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-wallet"></i> Selecciona la wallet de VERSO donde depositarás:</label>
+                    <select name="wallet_empresa_id" class="form-control" required>
+                        <option value="">-- Selecciona una wallet --</option>
+                        {% for wallet in wallets_empresa %}
+                        <option value="{{ wallet.id }}">
+                            {{ wallet.moneda }} - {{ wallet.get_red_display }} - {{ wallet.direccion }}
+                            ({{wallet.alias}})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn-realizar-cambio">
+                    <i class="fas fa-arrow-right"></i> Continuar
+                </button>
+                <a href="{% url 'usuarios:dashboard' %}" class="btn-outline-light">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section id="whatsapp">
+    <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank">
+        <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+    </a>
+</section>
+{% endblock %}
