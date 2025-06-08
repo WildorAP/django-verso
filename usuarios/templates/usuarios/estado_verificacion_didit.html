@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+<style>
+.estado-verificacion-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.estado-icon {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.estado-icon i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.verificado .estado-icon i {
+    color: #4CAF50;
+}
+
+.no-verificado .estado-icon i {
+    color: #ffc107;
+}
+
+.estado-titulo {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.estado-descripcion {
+    color: #b0b0b0;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.estado-detalles {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.estado-detalles h5 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.estado-detalles p {
+    color: #b0b0b0;
+    margin: 8px 0;
+}
+
+.btn-verificar {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-verificar:hover {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="registro-wrapper">
+    <main class="dashboard-container">
+        <div class="estado-verificacion-container {% if verificacion_completada %}verificado{% else %}no-verificado{% endif %}">
+            
+            {% if verificacion_completada %}
+                <div class="estado-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                
+                <h2 class="estado-titulo">Identidad Verificada</h2>
+                
+                <p class="estado-descripcion">
+                    Tu identidad ha sido verificada exitosamente.
+                </p>
+                
+                <div class="estado-detalles">
+                    <h5>Detalles de verificación:</h5>
+                    <p><strong>Fecha:</strong> {{ fecha_verificacion|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Estado:</strong> Verificado</p>
+                </div>
+                
+            {% else %}
+                <div class="estado-icon">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                
+                <h2 class="estado-titulo">Verificación Pendiente</h2>
+                
+                <p class="estado-descripcion">
+                    Para acceder a todas las funcionalidades, necesitas verificar tu identidad.
+                </p>
+                
+                {% if tiene_sesion_activa %}
+                    <div class="estado-detalles">
+                        <h5>Estado actual:</h5>
+                        <p>Tienes una sesión de verificación en proceso.</p>
+                        <p>Verifica el estado en la página de verificación.</p>
+                    </div>
+                    
+                    <a href="{% url 'usuarios:verificacion_completada' %}" class="btn-verificar">
+                        <i class="fas fa-eye mr-2"></i>
+                        Ver Estado de Verificación
+                    </a>
+                {% else %}
+                    <a href="{% url 'usuarios:iniciar_verificacion_didit' %}" class="btn-verificar">
+                        <i class="fas fa-camera mr-2"></i>
+                        Iniciar Verificación
+                    </a>
+                {% endif %}
+            {% endif %}
+            
+            <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-saltar-verificacion">
+                Volver al Perfil
+            </a>
+        </div>
+    </main>
+
+    <section id="whatsapp">
+        <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank">
+            <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+        </a>
+    </section>
+</section>
+{% endblock %} 

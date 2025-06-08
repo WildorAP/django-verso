@@ -245,10 +245,24 @@ h4, h5, h6 {
         padding: 1rem;
         border-radius: 0.5rem;
         margin-top: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-nav {
+        margin-right: 0;
     }
 
     .navbar-nav .nav-link {
-        padding: 0.8rem 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.375rem;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar .container {
+        padding: 0 15px;
     }
 
     h1 { font-size: var(--font-size-xl); }
@@ -259,10 +273,17 @@ h4, h5, h6 {
 
 @media (max-width: 768px) {
     body {
+        padding-top: 70px;
         font-size: var(--font-size-sm);
     }
 
+    .navbar-brand img.logo {
+        height: 30px;
+    }
+
     .footer {
+        padding: 2rem 0 1.5rem;
+        margin-top: 3rem;
         text-align: center;
     }
 
@@ -270,8 +291,24 @@ h4, h5, h6 {
         margin-bottom: 2rem;
     }
 
+    .footer .col-md-4:last-child {
+        margin-bottom: 0;
+    }
+
+    .footer ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .footer ul li {
-        margin-bottom: 1rem;
+        margin-bottom: 0.6rem;
+        font-size: var(--font-size-xs);
+    }
+
+    #whatsapp {
+        bottom: 20px;
+        right: 20px;
     }
 
     #whatsapp img.icono-wsp {
@@ -282,5 +319,25 @@ h4, h5, h6 {
     .page-link {
         padding: 0.4rem 0.6rem;
         font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img.logo {
+        height: 25px;
+    }
+
+    .footer {
+        padding: 1.5rem 0 1rem;
+    }
+
+    #whatsapp img.icono-wsp {
+        width: 35px;
+        height: 35px;
+    }
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 } 

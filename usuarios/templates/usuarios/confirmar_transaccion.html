@@ -51,7 +51,7 @@
         <div class="calculadora-container">
             {% if transaccion.tipo_operacion == 'CRYPTO_TO_FIAT' %}
             <div class="alert-custom">
-                <h5><i class="fas fa-exchange-alt"></i> Instrucciones para Envío de Cripto</h5>
+                <h5><i class="fas fa-exchange-alt"></i> Instrucciones para el envio de tus stablecoin</h5>
                 <p>Envía <strong>{{ transaccion.cantidad_origen }} {{ transaccion.moneda_origen }}</strong> a:</p>
                 {% if wallet_direccion %}
                 <div class="wallet-code">

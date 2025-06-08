@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 from django.contrib.auth.models import User
+from .storage import constancia_upload_path, ConstanciasStorage
 
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
@@ -39,7 +40,7 @@ class Perfil(models.Model):
             ('republica_dominicana', 'República Dominicana'),
             ('uruguay', 'Uruguay'),
             ('venezuela', 'Venezuela'),
-        ],default='Perú')
+        ],default='peru')
     estado_civil = models.CharField(max_length=50, choices=[
         ('soltero', 'Soltero'),
         ('casado', 'Casado'),
@@ -58,6 +59,14 @@ class Perfil(models.Model):
     codigo_verificacion_expira = models.DateTimeField(null=True, blank=True)
     cambio_password_verificado = models.BooleanField(default=False)
 
+    # Campos para verificación DIDIT
+    verificacion_didit_requerida = models.BooleanField(default=True)
+    verificacion_didit_completada = models.BooleanField(default=False)
+    didit_session_id = models.CharField(max_length=100, null=True, blank=True)
+    didit_session_url = models.URLField(max_length=500, null=True, blank=True)
+    fecha_verificacion_didit = models.DateTimeField(null=True, blank=True)
+    resultado_verificacion_didit = models.JSONField(default=dict, blank=True)
+
     def generar_codigo_verificacion_email(self):
         """Genera un nuevo código de verificación para el correo electrónico"""
         import random
@@ -69,6 +78,39 @@ class Perfil(models.Model):
         self.email_verificado = False
         self.save()
         return self.codigo_verificacion_email
+
+    def necesita_informacion_financiera(self):
+        """
+        Verifica si el usuario necesita completar su información financiera
+        """
+        # Solo verificar si ya completó la verificación DIDIT
+        if not self.verificacion_didit_completada:
+            return False
+            
+        # Verificar si tiene al menos una cuenta bancaria
+        tiene_cuenta = self.user.cuentas_bancarias.exists()
+        
+        # Verificar si tiene al menos una wallet
+        tiene_wallet = self.user.wallets.exists()
+        
+        # Necesita información financiera si no tiene ni cuenta ni wallet
+        return not (tiene_cuenta and tiene_wallet)
+    
+    def obtener_info_financiera_faltante(self):
+        """
+        Obtiene detalles específicos de qué información financiera falta
+        """
+        if not self.verificacion_didit_completada:
+            return None
+            
+        faltante = {
+            'necesita_cuenta': not self.user.cuentas_bancarias.exists(),
+            'necesita_wallet': not self.user.wallets.exists(),
+            'total_cuentas': self.user.cuentas_bancarias.count(),
+            'total_wallets': self.user.wallets.count()
+        }
+        
+        return faltante
 
     def verificar_codigo_email(self, codigo):
         """Verifica el código de verificación de correo electrónico"""
@@ -144,7 +186,13 @@ class Transaccion(models.Model):
     tasa_cambio = models.DecimalField(max_digits=20, decimal_places=6)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    constancia_archivo = models.FileField(upload_to='constancias/', blank=True, null=True)  # ✅
+    constancia_archivo = models.FileField(
+        upload_to=constancia_upload_path, 
+        storage=ConstanciasStorage(), 
+        blank=True, 
+        null=True,
+        help_text="Comprobante de la transacción (PDF, JPG, PNG)"
+    )  # ✅ Ahora usando AWS S3
     wallet = models.ForeignKey('Wallet', null=True, blank=True, on_delete=models.SET_NULL)
     wallet_empresa = models.ForeignKey('WalletEmpresa', null=True, blank=True, on_delete=models.SET_NULL)
     cuenta_empresa = models.ForeignKey('CuentaEmpresa', null=True, blank=True, on_delete=models.SET_NULL, related_name='transacciones')
@@ -192,8 +240,9 @@ class CuentaBancaria(models.Model):
 
 class Wallet(models.Model):
     REDES_PERMITIDAS = [
-        ('TRC20', 'Trc-20'),
-        ('BINANCE', 'Binance PAY'),
+        ('TRX', 'TRON (TRC-20)'),
+        ('ETH', 'Ethereum (ERC-20)'),
+        ('SOL', 'Solana'),
     ]
 
     MONEDA_CHOICES = [
@@ -201,14 +250,33 @@ class Wallet(models.Model):
         ('USDC', 'USDC (USD Coin)'),
     ]
 
+    ESTADO_RIESGO_CHOICES = [
+        ('PENDIENTE', 'Pendiente de Verificación'),
+        ('OPERATIVO', 'Operativo'),
+        ('RIESGO', 'Riesgo Detectado'),
+        ('NO_EXISTE', 'No Existe'),
+    ]
+
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wallets')
     red = models.CharField(max_length=20, choices=REDES_PERMITIDAS)
     moneda = models.CharField(max_length=10, choices=MONEDA_CHOICES, default='USDT')
     direccion = models.CharField(max_length=100)
-    alias = models.CharField(max_length=50, blank=True, null=True)  # opcional
+    alias = models.CharField(max_length=50, blank=True, null=True)
+    estado_riesgo = models.CharField(
+        max_length=20, 
+        choices=ESTADO_RIESGO_CHOICES,
+        default='PENDIENTE',
+        help_text='Estado de riesgo de la wallet'
+    )
+    ultima_verificacion = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.get_moneda_display()} - {self.get_red_display()} - {self.direccion}"
+
+    class Meta:
+        verbose_name = 'Wallet'
+        verbose_name_plural = 'Wallets'
+
 class WalletEmpresa(models.Model):
     MONEDA_CHOICES = [
         ('USDT', 'USDT'),

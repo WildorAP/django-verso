@@ -26,4 +26,13 @@ urlpatterns = [
 
     path('wallet/editar/<int:pk>/', EditarWalletView.as_view(), name='editar_wallet'),
     path('wallet/eliminar/<int:pk>/', EliminarWalletView.as_view(), name='eliminar_wallet'),
+    path('wallet/verificar/<int:wallet_id>/', views.verificar_wallet, name='verificar_wallet'),
+    
+    # URLs para verificación DIDIT
+    path('iniciar-verificacion-didit/', views.iniciar_verificacion_didit, name='iniciar_verificacion_didit'),
+    path('verificacion-completada/', views.verificacion_completada, name='verificacion_completada'),
+    path('sincronizar-verificacion-didit/', views.sincronizar_verificacion_didit, name='sincronizar_verificacion_didit'),
+    path('didit-webhook/', views.didit_webhook, name='didit_webhook'),
+    path('estado-verificacion-didit/', views.estado_verificacion_didit, name='estado_verificacion_didit'),
+    path('test-didit-auth/', views.test_didit_auth, name='test_didit_auth'),  # Vista temporal para pruebas
 ]

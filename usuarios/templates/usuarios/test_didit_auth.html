@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+<style>
+.test-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.test-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.test-header h1 {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.test-header p {
+    color: #b0b0b0;
+}
+
+.config-info {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.config-info h3 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.config-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #b0b0b0;
+}
+
+.config-value {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.test-results {
+    margin-top: 30px;
+}
+
+.test-results h3 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.result-item {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #666;
+}
+
+.result-item.success {
+    border-left-color: #4CAF50;
+}
+
+.result-item.error {
+    border-left-color: #dc3545;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.result-title {
+    color: #fff;
+    font-weight: 600;
+}
+
+.result-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.result-status.success {
+    background: #4CAF50;
+    color: white;
+}
+
+.result-status.error {
+    background: #dc3545;
+    color: white;
+}
+
+.result-details {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+.result-details pre {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-top: 10px;
+    color: #e0e0e0;
+}
+
+.error-message {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid #dc3545;
+    padding: 15px;
+    border-radius: 8px;
+    color: #dc3545;
+    text-align: center;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+    color: white;
+    text-decoration: none;
+}
+
+.warning-box {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    color: #ffc107;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+
+{% block title %}Prueba de Autenticación DIDIT{% endblock %}
+
+{% block content %}
+<div class="test-container">
+    <div class="test-header">
+        <h1><i class="fas fa-cog"></i> Prueba de Autenticación DIDIT</h1>
+        <p>Esta página ayuda a diagnosticar problemas de autenticación con la API de DIDIT</p>
+    </div>
+
+    <div class="warning-box">
+        <strong>⚠️ Importante:</strong> Esta es una vista temporal solo para diagnóstico. 
+        No compartas los resultados de esta página ya que pueden contener información sensible.
+    </div>
+
+    {% if error %}
+    <div class="error-message">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% else %}
+    
+    <div class="config-info">
+        <h3><i class="fas fa-info-circle"></i> Configuración Actual</h3>
+        
+        <div class="config-item">
+            <span>API Key configurada:</span>
+            <span class="config-value">
+                {% if api_key_configured %}
+                    ✅ Sí ({{ api_key_preview }})
+                {% else %}
+                    ❌ No
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="config-item">
+            <span>Workflow ID configurado:</span>
+            <span class="config-value">
+                {% if workflow_id_configured %}
+                    ✅ Sí ({{ workflow_id_preview }})
+                {% else %}
+                    ❌ No
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="config-item">
+            <span>Webhook Secret configurado:</span>
+            <span class="config-value">
+                {% if webhook_secret_configured %}
+                    ✅ Sí
+                {% else %}
+                    ❌ No
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="config-item">
+            <span>URL Base:</span>
+            <span class="config-value">{{ base_url }}</span>
+        </div>
+    </div>
+
+    {% if results %}
+    <div class="test-results">
+        <h3><i class="fas fa-flask"></i> Resultados de Pruebas de Autenticación</h3>
+        
+        {% for result in results %}
+        <div class="result-item {% if result.success %}success{% else %}error{% endif %}">
+            <div class="result-header">
+                <span class="result-title">{{ result.format }}</span>
+                <span class="result-status {% if result.success %}success{% else %}error{% endif %}">
+                    {% if result.success %}
+                        ✅ Funciona
+                    {% else %}
+                        ❌ Falló
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="result-details">
+                <strong>Headers utilizados:</strong>
+                <pre>{{ result.headers|pprint }}</pre>
+                
+                <strong>Código de respuesta:</strong> {{ result.status_code }}
+                
+                {% if result.response %}
+                <strong>Respuesta (primeros 200 caracteres):</strong>
+                <pre>{{ result.response }}</pre>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver al Perfil
+        </a>
+    </div>
+</div>
+{% endblock %} 

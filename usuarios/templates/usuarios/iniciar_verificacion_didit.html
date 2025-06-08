@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+<style>
+.verificacion-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.verificacion-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.verificacion-icon {
+    font-size: 4rem;
+    color: #38bdf8;
+    margin-bottom: 20px;
+}
+
+.verificacion-titulo {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.verificacion-subtitulo {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.proceso-steps {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+.proceso-steps h4 {
+    color: #38bdf8;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(56, 189, 248, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #38bdf8;
+}
+
+.step-number {
+    background: #38bdf8;
+    color: #0a1128;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.step-content h5 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.step-content p {
+    color: #b0b0b0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.requisitos {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid #ffc107;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.requisitos h5 {
+    color: #ffc107;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.requisitos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requisitos li {
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.requisitos li i {
+    color: #ffc107;
+    width: 16px;
+}
+
+.btn-iniciar-verificacion {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-iniciar-verificacion:hover {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+}
+
+.btn-iniciar-verificacion:disabled {
+    background: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-volver {
+    background: transparent;
+    color: #b0b0b0;
+    border: 1px solid #555;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-volver:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+.seguridad-info {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.seguridad-info h5 {
+    color: #4CAF50;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.seguridad-info p {
+    color: #e0e0e0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.message-alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.alert-error {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.alert-success {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+}
+
+.alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid #ffc107;
+    color: #ffc107;
+}
+
+.alert-info {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid #38bdf8;
+    color: #38bdf8;
+}
+
+@media (max-width: 768px) {
+    .verificacion-container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .verificacion-titulo {
+        font-size: 1.5rem;
+    }
+    
+    .step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-number {
+        margin-bottom: 10px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="registro-wrapper">
+    <main class="dashboard-container">
+        <div class="verificacion-container">
+            <div class="verificacion-header">
+                <div class="verificacion-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="verificacion-titulo">Verificación de Identidad</h1>
+                <p class="verificacion-subtitulo">
+                    Para garantizar la seguridad de tu cuenta y cumplir con las regulaciones, 
+                    necesitamos verificar tu identidad usando nuestro sistema seguro.
+                </p>
+            </div>
+
+            <div class="proceso-steps">
+                <h4><i class="fas fa-list-ol"></i> ¿Cómo funciona el proceso?</h4>
+                
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h5>Preparación</h5>
+                        <p>Ten a mano tu documento de identidad (DNI, pasaporte o carné de extranjería) y asegúrate de tener buena iluminación.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h5>Captura de documento</h5>
+                        <p>Tomarás una foto clara de la parte frontal y posterior de tu documento de identidad.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h5>Verificación facial</h5>
+                        <p>Realizarás una selfie y algunos movimientos simples para verificar que eres una persona real.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h5>Procesamiento</h5>
+                        <p>Nuestro sistema analizará la información. Este proceso suele tomar entre 5-30 minutos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="requisitos">
+                <h5><i class="fas fa-exclamation-triangle"></i> Requisitos importantes</h5>
+                <ul>
+                    <li><i class="fas fa-check"></i> Documento de identidad válido y vigente</li>
+                    <li><i class="fas fa-check"></i> Buena iluminación natural o artificial</li>
+                    <li><i class="fas fa-check"></i> Cámara funcionando correctamente</li>
+                    <li><i class="fas fa-check"></i> Conexión estable a internet</li>
+                    <li><i class="fas fa-check"></i> Unos 5-10 minutos de tiempo disponible</li>
+                </ul>
+            </div>
+
+            <div class="seguridad-info">
+                <h5><i class="fas fa-lock"></i> Tu seguridad es nuestra prioridad</h5>
+                <p>
+                    Toda tu información está protegida con encriptación de grado bancario. 
+                    Solo utilizamos estos datos para verificar tu identidad y cumplir con regulaciones legales.
+                    Nunca compartimos tu información personal con terceros.
+                </p>
+            </div>
+
+            {% if messages %}
+                <div style="margin: 20px 0;">
+                    {% for message in messages %}
+                                                 <div class="alert alert-{{ message.tags }} message-alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" id="form-iniciar-verificacion">
+                {% csrf_token %}
+                <button type="submit" class="btn-iniciar-verificacion" id="btn-iniciar">
+                    <i class="fas fa-play-circle"></i>
+                    Iniciar Verificación de Identidad
+                </button>
+            </form>
+
+            <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-volver">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Perfil
+            </a>
+        </div>
+    </main>
+
+    <section id="whatsapp">
+        <a href="https://wa.me/+51963597658?text=¡Hola%2C%20tengo%20problemas%20con%20la%20verificación!" target="_blank">
+            <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+        </a>
+    </section>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('form-iniciar-verificacion');
+    const btnIniciar = document.getElementById('btn-iniciar');
+    
+    if (form && btnIniciar) {
+        form.addEventListener('submit', function(e) {
+            // Mostrar estado de carga
+            btnIniciar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando verificación...';
+            btnIniciar.disabled = true;
+            
+            // Permitir que el formulario se envíe normalmente
+            // El servidor manejará la redirección a DIDIT
+        });
+    }
+});
+</script>
+{% endblock %} 

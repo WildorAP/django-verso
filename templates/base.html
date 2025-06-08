@@ -4,7 +4,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Versotek.io - Tu plataforma confiable para el intercambio de Stablecoins">
     <title>Versotek.io {% block title %}{% endblock %}</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
@@ -22,7 +23,7 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'principal' %}">
-                <img src="{% static 'img/logo.png' %}" alt="VERSO" class="logo" width="120">
+                <img src="{% static 'images/VERSO-LOGO-ESQUINA.png' %}" alt="VERSO" class="logo" width="120">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,32 +32,44 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'principal' %}">Inicio</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'principal' %}">
+                            <i class="fas fa-home mr-2"></i>Inicio
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'empresas' %}">Empresas</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'empresas' %}">
+                            <i class="fas fa-building mr-2"></i>Empresas
+                        </a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'usuarios:dashboard' %}">Dashboard</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'usuarios:dashboard' %}">
+                            <i class="fas fa-chart-line mr-2"></i>Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'usuarios:perfil_usuario' %}">Mi Perfil</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'usuarios:perfil_usuario' %}">
+                            <i class="fas fa-user mr-2"></i>Mi Perfil
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <form method="post" action="{% url 'usuarios:logout' %}" style="display: inline;">
+                        <form method="post" action="{% url 'usuarios:logout' %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
-                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            <button type="submit" class="nav-link d-flex align-items-center" style="background: none; border: none; cursor: pointer; width: 100%; padding: 0.5rem 1rem;">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                             </button>
                         </form>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'usuarios:login' %}">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'usuarios:registro' %}">Registrarse</a>
+                        <a class="nav-link d-flex align-items-center" href="{% url 'usuarios:registro' %}">
+                            <i class="fas fa-user-plus mr-2"></i>Registrarse
+                        </a>
                     </li>
                     {% endif %}
                 </ul>
@@ -65,36 +78,37 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="flex-grow-1">
+        <div class="container py-4">
         {% block content %}{% endblock %}
+        </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Sobre VERSO</h5>
-                    <p>Tu plataforma confiable para el intercambio de tus Stablecoins.
-                    </p>
+                    <p>Tu plataforma confiable para el intercambio de tus Stablecoins.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Enlaces Rápidos</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'principal' %}">Inicio</a></li>
-                        <li><a href="{% url 'empresas' %}">Empresas</a></li>
+                        <li><a href="{% url 'principal' %}"><i class="fas fa-chevron-right mr-2"></i>Inicio</a></li>
+                        <li><a href="{% url 'empresas' %}"><i class="fas fa-chevron-right mr-2"></i>Empresas</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contacto</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-envelope"></i> info@verso.com</li>
-                        <li><i class="fas fa-phone"></i> +51 963597658</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Lima, Perú</li>
+                        <li><i class="fas fa-envelope mr-2"></i>info@verso.com</li>
+                        <li><i class="fas fa-phone mr-2"></i>+51 963597658</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Lima, Perú</li>
                     </ul>
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row mt-4">
                 <div class="col-12 text-center">
                     <p class="mb-0">&copy; {% now "Y" %} VERSO. Todos los derechos reservados.</p>
                 </div>
@@ -104,7 +118,7 @@
 
     <!-- WhatsApp Button -->
     <section id="whatsapp">
-        <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank">
+        <a href="https://wa.me/+51963597658?text=¡Hola%20Verso%2C%20quiero%20más%20información!" target="_blank" class="whatsapp-link" aria-label="Contactar por WhatsApp">
             <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
         </a>
     </section>

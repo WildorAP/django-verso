@@ -6,6 +6,15 @@ register = template.Library()
 def split(value, delimiter='_'):
     """
     Divide una cadena usando el delimitador especificado.
-    Uso: {{ value|split:'_' }}
+    
+    Args:
+        value: La cadena a dividir
+        delimiter: El delimitador a usar (por defecto '_')
+    
+    Returns:
+        Lista de subcadenas
+    
+    Uso en template:
+        {{ value|split:'_' }}
     """
     return value.split(delimiter) 

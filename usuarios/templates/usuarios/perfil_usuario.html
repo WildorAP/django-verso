@@ -34,6 +34,36 @@
     .password-field input {
         padding-right: 40px;
     }
+
+    /* Estilos para el estado de verificación */
+    .verification-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .verification-status.verified {
+        background: rgba(76, 175, 80, 0.1);
+        border: 1px solid #4CAF50;
+        color: #4CAF50;
+    }
+
+    .verification-status.pending {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid #ffc107;
+        color: #ffc107;
+    }
+
+    .verification-status i {
+        font-size: 1.2rem;
+    }
+
+    .verification-status span {
+        font-weight: 600;
+    }
 </style>
 {% endblock %}
 
@@ -216,6 +246,15 @@
                                 <div>{{ wallet.direccion }}</div>
                                 <div class="mt-1">Red: {{ wallet.get_red_display }}
                                     {% if wallet.alias %} - {{ wallet.alias }}{% endif %}</div>
+                                <div class="mt-1">
+                                    Estado: <span id="estado-wallet-{{ wallet.id }}" 
+                                    class="{% if wallet.estado_riesgo == 'OPERATIVO' %}text-success{% elif wallet.estado_riesgo == 'RIESGO' %}text-danger{% elif wallet.estado_riesgo == 'NO_EXISTE' %}text-warning{% else %}text-secondary{% endif %}">
+                                        {{ wallet.get_estado_riesgo_display }}
+                                    </span>
+                                    {% if wallet.ultima_verificacion %}
+                                        <small class="text-muted">(Verificado: {{ wallet.ultima_verificacion|date:"d/m/Y H:i" }})</small>
+                                    {% endif %}
+                                </div>
                                 {% if modo == 'edicion' %}
                                 <div class="mt-2">
                                     <button type="button" class="btn-outline-primary btn-sm"
@@ -269,6 +308,44 @@
             <div class="content-card">
                 <h2><i class="fas fa-shield-alt"></i> Seguridad</h2>
                 <div class="info-display">
+                    <div class="info-row">
+                        <div class="info-label">Verificación de Identidad</div>
+                        <div class="info-value">
+                            {% if perfil.verificacion_didit_completada %}
+                                <div class="verification-status verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Identidad Verificada</span>
+                                    <small class="text-muted d-block">Verificado el {{ perfil.fecha_verificacion_didit|date:"d/m/Y" }}</small>
+                                </div>
+                            {% else %}
+                                <div class="verification-status pending">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Verificación Pendiente</span>
+                                    <small class="text-muted d-block">Verifica tu identidad para acceder a todas las funcionalidades</small>
+                                </div>
+                                <div class="mt-2">
+                                    {% if perfil.didit_session_id %}
+                                        <div class="d-flex gap-2 flex-wrap">
+                                        <a href="{% url 'usuarios:verificacion_completada' %}" class="btn-success">
+                                            <i class="fas fa-eye"></i> Ver Estado de Verificación
+                                        </a>
+                                                                                         <a href="{% url 'usuarios:sincronizar_verificacion_didit' %}" class="btn-secondary" id="btn-sincronizar">
+                                                 <i class="fas fa-sync"></i> Sincronizar Estado
+                                             </a>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            <i class="fas fa-info-circle"></i> 
+                                            Si completaste tu verificación en DIDIT, haz clic en "Sincronizar Estado" para actualizar tu perfil.
+                                        </small>
+                                    {% else %}
+                                        <a href="{% url 'usuarios:iniciar_verificacion_didit' %}" class="btn-success">
+                                            <i class="fas fa-camera"></i> Verificar Identidad
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                     <div class="info-row">
                         <div class="info-label">Cambio de Contraseña</div>
                         <div class="info-value">
@@ -354,34 +431,51 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label><i class="fas fa-coins"></i> Moneda</label>
-                        {{ form_wallet.moneda }}
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-network-wired"></i> Red</label>
-                        {{ form_wallet.red }}
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-fingerprint"></i> Dirección de Wallet</label>
-                        {{ form_wallet.direccion }}
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
-                        {{ form_wallet.alias }}
-                    </div>
-
-                    <div class="text-center mt-4">
-                        <button type="submit" name="agregar_wallet" class="btn-realizar-cambio">
-                            <i class="fas fa-plus"></i> Agregar Wallet
+                {% if not perfil.verificacion_didit_completada %}
+                    <div class="alert alert-warning text-center">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                        <h5>Verificación de Identidad Requerida</h5>
+                        <p>Para agregar wallets, primero debes verificar tu identidad en la sección de "Verificación de Identidad" de arriba.</p>
+                        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-arrow-up"></i> Ir a verificar primero
                         </button>
                     </div>
-                </form>
+                {% else %}
+                    <form method="post" id="formAgregarWallet">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label><i class="fas fa-coins"></i> Moneda</label>
+                            {{ form_wallet.moneda }}
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-network-wired"></i> Red</label>
+                            {{ form_wallet.red }}
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-fingerprint"></i> Dirección de Wallet</label>
+                            {{ form_wallet.direccion }}
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> Verificaremos automáticamente que tu wallet esté en estado operativo
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Alias (Opcional)</label>
+                            {{ form_wallet.alias }}
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" name="agregar_wallet" class="btn-realizar-cambio" id="btnAgregarWallet">
+                                <i class="fas fa-plus"></i> Verificar y Agregar Wallet
+                            </button>
+                            <small class="form-text text-muted mt-2">
+                                <i class="fas fa-shield-alt"></i> Solo se aceptarán wallets en estado operativo (sin factores de riesgo)
+                            </small>
+                        </div>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -490,6 +584,9 @@
                     <div class="form-group">
                         <label><i class="fas fa-fingerprint"></i> Dirección de Wallet</label>
                         <input type="text" name="direccion" id="edit-wallet-direccion" class="form-control" required>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle"></i> Si cambias la dirección, verificaremos automáticamente que esté en estado operativo
+                        </small>
                     </div>
 
                     <div class="form-group">
@@ -499,7 +596,7 @@
 
                     <div class="text-center mt-4">
                         <button type="submit" class="btn-success">
-                            <i class="fas fa-save"></i> Guardar cambios
+                            <i class="fas fa-save"></i> Verificar y Guardar cambios
                         </button>
                         <button type="button" class="btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times"></i> Cancelar
@@ -937,6 +1034,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+
+
+    // Manejo del botón de sincronización DIDIT
+    const btnSincronizar = document.getElementById('btn-sincronizar');
+    if (btnSincronizar) {
+        btnSincronizar.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const originalText = this.innerHTML;
+            
+            // Cambiar el aspecto del botón mientras se procesa
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
+            this.classList.add('disabled');
+            this.style.pointerEvents = 'none';
+            
+            // Redirigir después de un breve delay para mostrar el loading
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 300);
+        });
+    }
 });
 </script>
 {% endblock %}

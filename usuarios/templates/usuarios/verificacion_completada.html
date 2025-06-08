@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+<style>
+.verificacion-resultado-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.verificacion-resultado-icon {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.verificacion-resultado-icon i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.verificacion-exitosa .verificacion-resultado-icon i {
+    color: #4CAF50;
+}
+
+.verificacion-fallida .verificacion-resultado-icon i {
+    color: #dc3545;
+}
+
+.verificacion-pendiente .verificacion-resultado-icon i {
+    color: #ffc107;
+}
+
+.verificacion-titulo {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.verificacion-descripcion {
+    color: #b0b0b0;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.estado-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.estado-exitoso {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+}
+
+.estado-fallido {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.estado-pendiente {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+
+.btn-continuar {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-continuar:hover {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-reintentar {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-reintentar:hover {
+    background: linear-gradient(135deg, #f57c00, #ff9800);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+}
+
+.verificacion-detalles {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.verificacion-detalles h5 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.verificacion-detalles p {
+    color: #b0b0b0;
+    margin: 8px 0;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #ffc107;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="registro-wrapper">
+    <main class="dashboard-container">
+        <div class="verificacion-resultado-container {% if verificacion_exitosa %}verificacion-exitosa{% elif verificacion_fallida %}verificacion-fallida{% elif verificacion_pendiente %}verificacion-pendiente{% endif %}">
+            
+            {% if verificacion_exitosa %}
+                <div class="verificacion-resultado-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                
+                <h2 class="verificacion-titulo">¡Verificación Completada!</h2>
+                
+                <div class="text-center">
+                    <span class="estado-badge estado-exitoso">Identidad Verificada</span>
+                </div>
+                
+                <p class="verificacion-descripcion">
+                    Tu identidad ha sido verificada exitosamente. Ahora tienes acceso completo 
+                    a todas las funcionalidades de la plataforma.
+                </p>
+                
+                <div class="verificacion-detalles">
+                    <h5>Detalles de la verificación:</h5>
+                    <p><strong>Fecha:</strong> {{ perfil.fecha_verificacion_didit|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Estado:</strong> Verificado exitosamente</p>
+                    <p><strong>Método:</strong> Verificación de documento + Reconocimiento facial</p>
+                </div>
+                
+                {% if info_financiera_faltante and info_financiera_faltante.necesita_cuenta or info_financiera_faltante.necesita_wallet %}
+                <div class="info-financiera-requerida" style="background: rgba(255, 193, 7, 0.1); border: 1px solid #ffc107; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <i class="fas fa-wallet" style="font-size: 2.5rem; color: #ffc107; margin-bottom: 10px;"></i>
+                        <h4 style="color: #ffc107; margin-bottom: 10px;">¡Un paso más para completar tu configuración!</h4>
+                    </div>
+                    
+                    <p style="color: #fff; text-align: center; margin-bottom: 20px;">
+                        Para poder realizar operaciones, necesitas agregar tu información financiera:
+                    </p>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                        {% if info_financiera_faltante.necesita_cuenta %}
+                        <div style="color: #b0b0b0; margin-bottom: 10px;">
+                            <i class="fas fa-university" style="color: #ffc107; margin-right: 8px;"></i>
+                            <span>Cuenta bancaria</span>
+                            <span style="color: #ffc107; margin-left: 10px;">✗ Faltante</span>
+                        </div>
+                        {% else %}
+                        <div style="color: #b0b0b0; margin-bottom: 10px;">
+                            <i class="fas fa-university" style="color: #4CAF50; margin-right: 8px;"></i>
+                            <span>Cuenta bancaria</span>
+                            <span style="color: #4CAF50; margin-left: 10px;">✓ Configurada ({{ info_financiera_faltante.total_cuentas }})</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if info_financiera_faltante.necesita_wallet %}
+                        <div style="color: #b0b0b0;">
+                            <i class="fas fa-wallet" style="color: #ffc107; margin-right: 8px;"></i>
+                            <span>Wallet de criptomonedas</span>
+                            <span style="color: #ffc107; margin-left: 10px;">✗ Faltante</span>
+                        </div>
+                        {% else %}
+                        <div style="color: #b0b0b0;">
+                            <i class="fas fa-wallet" style="color: #4CAF50; margin-right: 8px;"></i>
+                            <span>Wallet de criptomonedas</span>
+                            <span style="color: #4CAF50; margin-left: 10px;">✓ Configurada ({{ info_financiera_faltante.total_wallets }})</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">
+                        <a href="{% url 'usuarios:perfil_usuario' %}?seccion=financiera" class="btn-continuar" style="background: linear-gradient(135deg, #ffc107, #ff8f00); flex: 1; max-width: 280px; min-width: 220px;">
+                            <i class="fas fa-cogs mr-2"></i>
+                            Configurar Información Financiera
+                        </a>
+                    </div>
+                    <p style="color: #b0b0b0; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">
+                        <i class="fas fa-info-circle"></i> Puedes hacerlo ahora o más tarde desde tu perfil
+                    </p>
+                </div>
+                
+                <div style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-continuar" style="background: linear-gradient(135deg, #6c757d, #495057); flex: 1; max-width: 350px; min-width: 250px;">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Ir al Panel de Usuario (Configurar más tarde)
+                    </a>
+                </div>
+                {% else %}
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-continuar" style="max-width: 350px; min-width: 250px;">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Continuar al Panel de Usuario
+                    </a>
+                </div>
+                {% endif %}
+                
+            {% elif verificacion_fallida %}
+                <div class="verificacion-resultado-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                
+                <h2 class="verificacion-titulo">Verificación No Completada</h2>
+                
+                <div class="text-center">
+                    <span class="estado-badge estado-fallido">Verificación Fallida</span>
+                </div>
+                
+                <p class="verificacion-descripcion">
+                    No pudimos completar la verificación de tu identidad. Esto puede deberse a 
+                    problemas con la calidad de las imágenes o documentos no válidos.
+                </p>
+                
+                <div class="verificacion-detalles">
+                    <h5>¿Qué puedes hacer?</h5>
+                    <p>• Asegúrate de que tu documento esté en buen estado</p>
+                    <p>• Verifica que haya buena iluminación</p>
+                    <p>• Mantén el documento plano y sin reflejos</p>
+                    <p>• Asegúrate de que tu rostro esté claramente visible</p>
+                </div>
+                
+                <a href="{% url 'usuarios:iniciar_verificacion_didit' %}" class="btn-reintentar">
+                    <i class="fas fa-redo mr-2"></i>
+                    Intentar Verificación Nuevamente
+                </a>
+                
+                <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-saltar-verificacion">
+                    Hacer esto más tarde
+                </a>
+                
+            {% elif verificacion_pendiente %}
+                <div class="verificacion-resultado-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                
+                <h2 class="verificacion-titulo">Verificación en Proceso</h2>
+                
+                <div class="text-center">
+                    <span class="estado-badge estado-pendiente">
+                        <span class="loading-spinner"></span>
+                        Procesando...
+                    </span>
+                </div>
+                
+                <p class="verificacion-descripcion">
+                    Tu verificación está siendo procesada por nuestro equipo. 
+                    Este proceso puede tomar hasta 24 horas en casos complejos.
+                </p>
+                
+                <div class="verificacion-detalles">
+                    <h5>¿Qué sigue?</h5>
+                    <p>• Te notificaremos por correo cuando esté lista</p>
+                    <p>• Puedes seguir usando las funciones básicas</p>
+                    <p>• No necesitas hacer nada más por ahora</p>
+                </div>
+                
+                <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-continuar">
+                    <i class="fas fa-arrow-right mr-2"></i>
+                    Ir al Panel de Usuario
+                </a>
+                
+            {% else %}
+                <div class="verificacion-resultado-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                
+                <h2 class="verificacion-titulo">Error en la Verificación</h2>
+                
+                <div class="text-center">
+                    <span class="estado-badge estado-fallido">Error</span>
+                </div>
+                
+                <p class="verificacion-descripcion">
+                    Ocurrió un error al procesar tu verificación. Por favor, inténtalo nuevamente 
+                    o contacta a nuestro soporte si el problema persiste.
+                </p>
+                
+                <a href="{% url 'usuarios:iniciar_verificacion_didit' %}" class="btn-reintentar">
+                    <i class="fas fa-redo mr-2"></i>
+                    Intentar Nuevamente
+                </a>
+                
+                <a href="{% url 'usuarios:perfil_usuario' %}" class="btn-saltar-verificacion">
+                    Ir al Panel de Usuario
+                </a>
+            {% endif %}
+
+            {% if messages %}
+                <div style="margin-top: 20px;">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-center" style="background: rgba(76, 175, 80, 0.1); border: 1px solid #4CAF50; color: #4CAF50; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <section id="whatsapp">
+        <a href="https://wa.me/+51963597658?text=¡Hola%2C%20quiero%20más%20información!" target="_blank">
+            <img src="{% static 'images/social.png' %}" alt="WhatsApp" class="icono-wsp">
+        </a>
+    </section>
+</section>
+
+{% if verificacion_pendiente %}
+<script>
+// Variables de configuración
+window.verificacionConfig = {
+    pendiente: true,
+    sincronizarUrl: '{% url "usuarios:sincronizar_verificacion_didit" %}'
+};
+</script>
+{% else %}
+<script>
+// Variables de configuración
+window.verificacionConfig = {
+    pendiente: false,
+    sincronizarUrl: ''
+};
+</script>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh para verificaciones pendientes
+    if (window.verificacionConfig && window.verificacionConfig.pendiente) {
+        setTimeout(function() {
+            window.location.reload();
+        }, 30000);
+    }
+
+    // Mejorar UX de los botones
+    var buttons = document.querySelectorAll('.btn-continuar, .btn-reintentar');
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            var originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...';
+            this.disabled = true;
+            
+            if (this.tagName === 'A') {
+                setTimeout(function() {
+                    // La navegación ocurrirá naturalmente
+                }, 300);
+            }
+        });
+    });
+
+    // Verificar estado de verificación si está pendiente
+    if (window.verificacionConfig && window.verificacionConfig.pendiente) {
+        function verificarEstado() {
+            fetch(window.verificacionConfig.sincronizarUrl, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function(response) {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch(function(error) {
+                console.log('Error al verificar estado:', error);
+            });
+        }
+
+        setInterval(verificarEstado, 60000);
+    }
+});
+</script>
+{% endblock %} 
