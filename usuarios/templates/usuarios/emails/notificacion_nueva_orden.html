@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .orden-info {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .orden-info h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .info-value {
+            color: #333;
+        }
+        .estado {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: #ffc107;
+            color: #212529;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .btn-admin {
+            display: inline-block;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 Nueva Orden Pendiente</h1>
+            <p>Un cliente ha subido su constancia y necesita atención</p>
+        </div>
+        
+        <div class="content">
+            <div class="orden-info">
+                <h3>📋 Detalles de la Orden #{{ transaccion.id }}</h3>
+                
+                <div class="info-row">
+                    <span class="info-label">👤 Cliente:</span>
+                    <span class="info-value">{{ cliente_nombre }} ({{ cliente_email }})</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">🔄 Tipo de Operación:</span>
+                    <span class="info-value">{{ tipo_operacion }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">💰 Desde:</span>
+                    <span class="info-value">{{ cantidad_origen }} {{ moneda_origen }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">💎 Hacia:</span>
+                    <span class="info-value">{{ cantidad_destino }} {{ moneda_destino }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">📅 Fecha:</span>
+                    <span class="info-value">{{ fecha_creacion|date:"d/m/Y H:i" }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">📊 Estado:</span>
+                    <span class="info-value"><span class="estado">PENDIENTE</span></span>
+                </div>
+            </div>
+            
+            <p><strong>✅ El cliente ha subido su constancia de {{ tipo_operacion|lower }} y la orden está lista para ser procesada.</strong></p>
+            
+            <p>Por favor, revisa la transacción en el panel de administración para verificar la constancia y proceder con la operación.</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ admin_url }}" class="btn-admin">
+                    🔧 Ver en Admin Panel
+                </a>
+            </div>
+            
+            <div style="background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                <p style="margin: 0; font-size: 14px;">
+                    <strong>💡 Recordatorio:</strong> 
+                    Procesa esta orden lo antes posible para mantener la satisfacción del cliente.
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Este es un mensaje automático del sistema Verso</p>
+            <p>Para soporte técnico: soporte@versotek.io</p>
+        </div>
+    </div>
+</body>
+</html> 

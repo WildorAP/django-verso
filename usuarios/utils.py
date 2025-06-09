@@ -3,6 +3,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import logging
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -71,4 +72,63 @@ def enviar_codigo_verificacion_registro(email, codigo, nombre):
         )
     except Exception as e:
         logger.error(f"Error en enviar_codigo_verificacion_registro para {email}: {str(e)}")
-        raise Exception(f"Error al enviar el correo de verificación de registro: {str(e)}") 
+        raise Exception(f"Error al enviar el correo de verificación de registro: {str(e)}")
+
+def enviar_notificacion_nueva_orden(transaccion, email_admin):
+    """
+    Envía una notificación por correo cuando se sube una nueva constancia de transacción.
+    """
+    try:
+        context = {
+            'transaccion': transaccion,
+            'cliente_nombre': transaccion.usuario.get_full_name() or transaccion.usuario.username,
+            'cliente_email': transaccion.usuario.email,
+            'tipo_operacion': transaccion.get_tipo_operacion_display(),
+            'moneda_origen': transaccion.moneda_origen,
+            'cantidad_origen': transaccion.cantidad_origen,
+            'moneda_destino': transaccion.moneda_destino,
+            'cantidad_destino': transaccion.cantidad_destino,
+            'fecha_creacion': transaccion.fecha_creacion,
+            'admin_url': f'/admin/usuarios/transaccion/{transaccion.id}/change/'
+        }
+        return enviar_correo_con_template(
+            asunto=f'Nueva Orden Pendiente #{transaccion.id} - {transaccion.usuario.username}',
+            template_html='usuarios/emails/notificacion_nueva_orden.html',
+            context=context,
+            destinatario=email_admin
+        )
+    except Exception as e:
+        logger.error(f"Error en enviar_notificacion_nueva_orden para transacción {transaccion.id}: {str(e)}")
+        raise Exception(f"Error al enviar notificación de nueva orden: {str(e)}")
+
+def enviar_notificacion_operacion_completada(transaccion):
+    """
+    Envía una notificación por correo al cliente cuando su operación ha sido completada.
+    """
+    try:
+        # Obtener información del perfil del cliente
+        perfil = getattr(transaccion.usuario, 'perfil', None)
+        cliente_nombre = perfil.nombre if perfil and perfil.nombre else transaccion.usuario.get_full_name() or transaccion.usuario.username
+        
+        context = {
+            'transaccion': transaccion,
+            'cliente_nombre': cliente_nombre,
+            'cliente_email': transaccion.usuario.email,
+            'tipo_operacion': transaccion.get_tipo_operacion_display(),
+            'moneda_origen': transaccion.moneda_origen,
+            'cantidad_origen': transaccion.cantidad_origen,
+            'moneda_destino': transaccion.moneda_destino,
+            'cantidad_destino': transaccion.cantidad_destino,
+            'fecha_creacion': transaccion.fecha_creacion,
+            'fecha_completada': transaccion.fecha_actualizacion if hasattr(transaccion, 'fecha_actualizacion') else timezone.now(),
+            'dashboard_url': '/usuarios/dashboard/'
+        }
+        return enviar_correo_con_template(
+            asunto=f'✅ Operación #{transaccion.id} Completada - Verso',
+            template_html='usuarios/emails/operacion_completada.html',
+            context=context,
+            destinatario=transaccion.usuario.email
+        )
+    except Exception as e:
+        logger.error(f"Error en enviar_notificacion_operacion_completada para transacción {transaccion.id}: {str(e)}")
+        raise Exception(f"Error al enviar notificación de operación completada: {str(e)}") 

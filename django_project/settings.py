@@ -11,17 +11,10 @@ load_dotenv()
 
 debug_env = os.getenv('DEBUG')
 
-if os.environ.get('RUN_MAIN') == 'true' or 'runserver' not in sys.argv:
-    print(f"1. Valor inicial de DEBUG en .env: {debug_env}")
-    print(f"2. Tipo de DEBUG en .env: {type(debug_env)}")
-
 if 'RAILWAY_ENVIRONMENT' not in os.environ:
     DEBUG = True
 else:
     DEBUG = str(debug_env or "False").lower() in ['true', '1', 'yes', 'y', 'on']
-
-if os.environ.get('RUN_MAIN') == 'true' or 'runserver' not in sys.argv:
-    print(f"3. Valor final de DEBUG: {DEBUG}")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -172,7 +165,27 @@ CSRF_TRUSTED_ORIGINS =['http://*','https://django-verso-production.up.railway.ap
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+# Configuraciones de seguridad
+X_FRAME_OPTIONS = 'DENY' if not DEBUG else 'SAMEORIGIN'
+
+# Configuraciones de seguridad para producción
+if not DEBUG:
+    # HTTPS y seguridad
+    SECURE_HSTS_SECONDS = 31536000  # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    
+    # Cookies seguras
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    
+    # Headers de seguridad adicionales
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 # Configuración de correo electrónico
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -189,6 +202,12 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 # Verificar que las credenciales estén configuradas
 if not all([EMAIL_HOST_USER, EMAIL_HOST_PASSWORD]):
     raise ValueError("Las credenciales de correo no están configuradas correctamente en el archivo .env")
+
+# Email del administrador para notificaciones
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", EMAIL_HOST_USER)
+if not ADMIN_EMAIL:
+    print("ADVERTENCIA: ADMIN_EMAIL no está configurado en el archivo .env")
+    print("Se usará EMAIL_HOST_USER como email del administrador por defecto.")
 
 # Configuración de logging
 LOGGING = {
@@ -245,6 +264,9 @@ DIDIT_API_KEY = os.getenv("DIDIT_API_KEY")
 DIDIT_BASE_URL = os.getenv("DIDIT_BASE_URL", "https://verification.didit.me")
 DIDIT_WORKFLOW_ID = os.getenv("DIDIT_WORKFLOW_ID")
 DIDIT_WEBHOOK_SECRET_KEY = os.getenv("DIDIT_WEBHOOK_SECRET_KEY")
+
+# Configuración de APIs de blockchain para verificación de wallets
+ETHERSCAN_API_KEY = os.getenv("ETHERSCAN_API_KEY")
 
 # Verificar que las configuraciones de DIDIT estén disponibles
 if not DIDIT_API_KEY:
@@ -331,17 +353,38 @@ if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and AWS_STORAGE_BUCKET_NAME:
             error_code = int(e.response['Error']['Code'])
             if error_code == 404:
                 print(f"❌ El bucket '{AWS_STORAGE_BUCKET_NAME}' no existe o no es accesible")
+                print("🔄 Usando almacenamiento local como fallback")
+                DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+                MEDIA_URL = '/media/'
             elif error_code == 403:
                 print(f"❌ Sin permisos para acceder al bucket '{AWS_STORAGE_BUCKET_NAME}'")
+                print("🔄 Usando almacenamiento local como fallback")
+                DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+                MEDIA_URL = '/media/'
             else:
                 print(f"❌ Error al acceder al bucket S3: {e}")
+                print("🔄 Usando almacenamiento local como fallback")
+                DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+                MEDIA_URL = '/media/'
                 
     except ImportError:
         print("⚠️  boto3 no está instalado. Instala con: pip install boto3")
+        DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+        MEDIA_URL = '/media/'
     except NoCredentialsError:
         print("❌ Credenciales AWS inválidas")
+        print("🔄 Usando almacenamiento local como fallback")
+        DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+        MEDIA_URL = '/media/'
     except Exception as e:
         print(f"❌ Error al configurar AWS S3: {e}")
+        print("🔄 Usando almacenamiento local como fallback")
+        DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+        MEDIA_URL = '/media/'
+else:
+    print("⚠️  Credenciales AWS incompletas. Usando almacenamiento local.")
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_URL = '/media/'
 
 # Configuración específica para constancias
 CONSTANCIAS_STORAGE = 'usuarios.storage.ConstanciasStorage'

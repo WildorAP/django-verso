@@ -29,6 +29,9 @@ import requests
 from .didit_api import DiditAPI
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # ===============================================
@@ -344,6 +347,17 @@ def confirmar_transaccion(request, transaccion_id):
         transaccion.estado = 'PENDIENTE'
         transaccion.save()
 
+        # Enviar notificación por correo al administrador
+        try:
+            from django.conf import settings
+            from .utils import enviar_notificacion_nueva_orden
+            
+            enviar_notificacion_nueva_orden(transaccion, settings.ADMIN_EMAIL)
+            logger.info(f"Notificación de nueva orden enviada para transacción {transaccion.id}")
+        except Exception as e:
+            logger.error(f"Error al enviar notificación de nueva orden para transacción {transaccion.id}: {str(e)}")
+            # No interrumpir el flujo aunque falle el envío del correo
+
         return redirect(reverse('usuarios:dashboard'))
 
     return render(request, 'usuarios/confirmar_transaccion.html', {
@@ -495,13 +509,14 @@ def perfil_usuario(request):
             form_wallet = WalletForm(request.POST)
             if form_wallet.is_valid():
                 direccion = form_wallet.cleaned_data['direccion']
+                red = form_wallet.cleaned_data['red']  # ✅ OBTENER LA RED
                 
                 # Verificar el estado de la wallet antes de agregarla
                 try:
-                    resultado_verificacion = verificar_wallet_riesgo(direccion)
+                    resultado_verificacion = verificar_wallet_riesgo(direccion, red)  # ✅ PASAR RED
                     
                     if not resultado_verificacion['valid']:
-                        messages.error(request, 'La dirección de wallet no es válida o no existe. Por favor, verifica la dirección.')
+                        messages.error(request, 'La dirección/correo no es válida. Por favor, verifica los datos.')
                         return redirect(reverse('usuarios:perfil_usuario') + '?seccion=financiera')
                     
                     if resultado_verificacion['riesgo']:
@@ -512,11 +527,11 @@ def perfil_usuario(request):
                     wallet = form_wallet.save(commit=False)
                     wallet.usuario = user
                     
-                    # Establecer estado basado en verificación
-                    if resultado_verificacion['riesgo']:
-                        wallet.estado_riesgo = 'RIESGO'
-                    else:
+                    # ✅ PARA BINANCE PAY SIEMPRE ES OPERATIVO
+                    if red == 'BINANCE_PAY':
                         wallet.estado_riesgo = 'OPERATIVO'
+                    else:
+                        wallet.estado_riesgo = 'OPERATIVO' if not resultado_verificacion['riesgo'] else 'RIESGO'
                     
                     wallet.ultima_verificacion = timezone.now()
                     wallet.save()
@@ -588,19 +603,20 @@ class EditarWalletView(LoginRequiredMixin, UpdateView):
             messages.error(self.request, 'Debes verificar tu identidad antes de editar wallets.')
             return redirect(reverse('usuarios:perfil_usuario') + '?seccion=financiera')
         
-        # Obtener la nueva dirección
+        # Obtener la nueva dirección y red
         nueva_direccion = form.cleaned_data['direccion']
+        nueva_red = form.cleaned_data['red']  # ✅ OBTENER LA RED
         
-        # Si la dirección no cambió, no necesitamos verificar
-        if nueva_direccion == self.object.direccion:
+        # Si ni la dirección ni la red cambiaron, no necesitamos verificar
+        if nueva_direccion == self.object.direccion and nueva_red == self.object.red:
             return super().form_valid(form)
         
         # Verificar el estado de la nueva dirección
         try:
-            resultado_verificacion = verificar_wallet_riesgo(nueva_direccion)
+            resultado_verificacion = verificar_wallet_riesgo(nueva_direccion, nueva_red)  # ✅ PASAR RED
             
             if not resultado_verificacion['valid']:
-                messages.error(self.request, 'La nueva dirección de wallet no es válida o no existe. Por favor, verifica la dirección.')
+                messages.error(self.request, 'La nueva dirección/correo no es válida. Por favor, verifica los datos.')
                 return self.form_invalid(form)
             
             if resultado_verificacion['riesgo']:
@@ -610,11 +626,11 @@ class EditarWalletView(LoginRequiredMixin, UpdateView):
             # Si llegamos aquí, la nueva dirección es válida y operativa
             wallet = form.save(commit=False)
             
-            # Actualizar estado basado en verificación
-            if resultado_verificacion['riesgo']:
-                wallet.estado_riesgo = 'RIESGO'
-            else:
+            # ✅ PARA BINANCE PAY SIEMPRE ES OPERATIVO
+            if nueva_red == 'BINANCE_PAY':
                 wallet.estado_riesgo = 'OPERATIVO'
+            else:
+                wallet.estado_riesgo = 'OPERATIVO' if not resultado_verificacion['riesgo'] else 'RIESGO'
             
             wallet.ultima_verificacion = timezone.now()
             wallet.save()
@@ -764,20 +780,53 @@ def cambiar_password_recuperacion(request):
     
     return render(request, 'usuarios/cambiar_password_recuperacion.html')
 
-def verificar_wallet_riesgo(direccion):
+def verificar_wallet_riesgo(direccion, red=None):
+    """
+    Verifica el riesgo de una wallet
+    Para Binance Pay no hace verificación blockchain
+    """
+    
+    # ✅ EXCLUIR BINANCE PAY DE VERIFICACIÓN BLOCKCHAIN
+    if red == 'BINANCE_PAY':
+        # Para Binance Pay solo validamos que sea un correo válido
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError
+        
+        try:
+            validate_email(direccion)
+            return {
+                'valid': True,
+                'riesgo': False,
+                'detalles_riesgo': {
+                    'factores': [],
+                    'total_factores': 0,
+                    'fuente': 'Binance Pay - No requiere verificación blockchain'
+                }
+            }
+        except ValidationError:
+            return {
+                'valid': False,
+                'riesgo': False,
+                'detalles_riesgo': {
+                    'factores': ['Correo electrónico inválido para Binance Pay'],
+                    'total_factores': 1,
+                    'fuente': 'Validación local'
+                }
+            }
+    
+    # ✅ CÓDIGO EXISTENTE PARA OTRAS REDES
     if direccion.startswith('0x'):
         # Ethereum → GoPlusLabs
         url = f"https://api.gopluslabs.io/api/v1/address_security/eth?address={direccion}"
         try:
             r = requests.get(url)
             data = r.json()
-            print(f"GoPlusLabs response: {data}")  # Debug log
+            # Debug log removido para producción
             
             # Verificamos si la dirección existe primero usando la respuesta completa
             if data.get("code") == 1:  # La API devuelve código 1 cuando la solicitud es exitosa
                 result = data.get("result", {}).get(direccion.lower(), {})
                 if not result:
-                    print(f"No data found for address in GoPlusLabs response")
                     # Si no hay datos para esta dirección, intentamos con Etherscan
                     raise Exception("No data found in GoPlusLabs")
                 
@@ -826,11 +875,23 @@ def verificar_wallet_riesgo(direccion):
                 }
             
             # Si GoPlusLabs no pudo verificar, intentamos con Etherscan
-            etherscan_api_key = "NSZCD6S4TKVWRS13PMQFMVTNP6H7NAGHUY"  # API key real de Etherscan
+            from django.conf import settings
+            etherscan_api_key = getattr(settings, 'ETHERSCAN_API_KEY', None)
+            
+            if not etherscan_api_key:
+                return {
+                    'valid': False,
+                    'riesgo': False,
+                    'detalles_riesgo': {
+                        'factores': ["Etherscan API key no configurada"],
+                        'total_factores': 1,
+                        'fuente': 'Error de configuración'
+                    }
+                }
             etherscan_url = f"https://api.etherscan.io/api?module=account&action=balance&address={direccion}&tag=latest&apikey={etherscan_api_key}"
             r = requests.get(etherscan_url)
             data = r.json()
-            print(f"Etherscan response: {data}")  # Debug log
+            # Debug log removido para producción
             
             # Etherscan devuelve status "1" si la solicitud es exitosa
             if data.get("status") == "1":
@@ -841,12 +902,12 @@ def verificar_wallet_riesgo(direccion):
                 tx_url = f"https://api.etherscan.io/api?module=account&action=txlist&address={direccion}&startblock=0&endblock=99999999&sort=asc&apikey={etherscan_api_key}"
                 tx_response = requests.get(tx_url)
                 tx_data = tx_response.json()
-                print(f"Etherscan TX response: {tx_data}")  # Debug log
+                # Debug log removido para producción
                 
                 # Si la dirección existe, debería tener al menos 1 transacción o un balance > 0
                 if tx_data.get("status") == "1":
                     transactions = tx_data.get("result", [])
-                    print(f"Balance: {balance}, Transactions count: {len(transactions)}")  # Debug log
+                    # Debug log removido para producción
                     
                     # Dirección válida si tiene balance > 0 O tiene transacciones
                     if balance > 0 or len(transactions) > 0:
@@ -885,7 +946,7 @@ def verificar_wallet_riesgo(direccion):
                     }
             elif data.get("status") == "0":
                 error_msg = data.get("result", "Unknown error")
-                print(f"Etherscan error: {error_msg}")
+                # Error log removido para producción
                 if "Invalid API Key" in error_msg:
                     return {
                         'valid': False,
@@ -921,7 +982,10 @@ def verificar_wallet_riesgo(direccion):
             }
             
         except Exception as e:
-            print(f"Error verificando ETH: {str(e)}")
+            # Error log using Django logging instead of print for production
+            import logging
+            logger = logging.getLogger('usuarios')
+            logger.error(f"Error verificando ETH: {str(e)}")
             # En caso de error, siempre devolver como inválida
             # No podemos garantizar que la dirección sea válida si no la pudimos verificar
             return {
@@ -949,7 +1013,9 @@ def verificar_wallet_riesgo(direccion):
                 }
             }
         except Exception as e:
-            print(f"Error verificando TRON: {str(e)}")
+            import logging
+            logger = logging.getLogger('usuarios')
+            logger.error(f"Error verificando TRON: {str(e)}")
             return {
                 'valid': False,
                 'riesgo': False,
@@ -979,7 +1045,9 @@ def verificar_wallet_riesgo(direccion):
                 }
             }
         except Exception as e:
-            print(f"Error verificando Solana: {str(e)}")
+            import logging
+            logger = logging.getLogger('usuarios')
+            logger.error(f"Error verificando Solana: {str(e)}")
             return {
                 'valid': False,
                 'riesgo': False,
@@ -1004,7 +1072,7 @@ def verificar_wallet(request, wallet_id):
     
     try:
         # Verificar la wallet usando la nueva función
-        resultado = verificar_wallet_riesgo(wallet.direccion)
+        resultado = verificar_wallet_riesgo(wallet.direccion, wallet.red)  # ✅ PASAR RED
         
         if resultado['valid']:
             if resultado['riesgo']:
@@ -1030,7 +1098,9 @@ def verificar_wallet(request, wallet_id):
         })
         
     except Exception as e:
-        print(f"Error en verificar_wallet: {str(e)}")
+        import logging
+        logger = logging.getLogger('usuarios')
+        logger.error(f"Error en verificar_wallet: {str(e)}")
         return JsonResponse({
             'status': 'error',
             'message': str(e)

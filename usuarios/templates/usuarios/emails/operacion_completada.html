@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .success-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .operacion-info {
+            background-color: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .operacion-info h3 {
+            margin-top: 0;
+            color: #059669;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #dcfce7;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #374151;
+        }
+        .info-value {
+            color: #059669;
+            font-weight: 600;
+        }
+        .conversion-highlight {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 2px solid #3b82f6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .conversion-highlight .from {
+            font-size: 18px;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+        .conversion-highlight .arrow {
+            font-size: 24px;
+            color: #3b82f6;
+            margin: 10px 0;
+        }
+        .conversion-highlight .to {
+            font-size: 20px;
+            color: #059669;
+            font-weight: bold;
+        }
+        .btn-dashboard {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 16px;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 25px 20px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer h4 {
+            color: #059669;
+            margin: 0 0 10px 0;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .social-links {
+            margin-top: 15px;
+        }
+        .social-links a {
+            color: #3b82f6;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .highlight-box p {
+            margin: 0;
+            color: #92400e;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                ✅ ¡Operación Completada!
+            </h1>
+            <p>Tu {{ tipo_operacion|lower }} ha sido procesada exitosamente</p>
+        </div>
+        
+        <div class="content">
+            <p><strong>Hola {{ cliente_nombre }},</strong></p>
+            
+            <p>Nos complace informarte que tu operación ha sido <strong>completada exitosamente</strong>. Los detalles de tu transacción se encuentran a continuación:</p>
+            
+            <div class="operacion-info">
+                <h3>📋 Detalles de tu Operación #{{ transaccion.id }}</h3>
+                
+                <div class="info-row">
+                    <span class="info-label">🔄 Tipo de Operación:</span>
+                    <span class="info-value">{{ tipo_operacion }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">📅 Fecha de Inicio:</span>
+                    <span class="info-value">{{ fecha_creacion|date:"d/m/Y H:i" }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">✅ Fecha de Finalización:</span>
+                    <span class="info-value">{{ fecha_completada|date:"d/m/Y H:i" }}</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label">📊 Estado:</span>
+                    <span class="info-value">
+                        <span class="success-badge">COMPLETADA</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="conversion-highlight">
+                <div class="from">
+                    💰 Enviaste: <strong>{{ cantidad_origen }} {{ moneda_origen }}</strong>
+                </div>
+                <div class="arrow">⬇️</div>
+                <div class="to">
+                    💎 Recibiste: <strong>{{ cantidad_destino }} {{ moneda_destino }}</strong>
+                </div>
+            </div>
+            
+            {% if tipo_operacion == 'Cripto a Soles/Dólares' %}
+            <div class="highlight-box">
+                <p>
+                    💳 El dinero ha sido transferido a tu cuenta bancaria registrada.
+                    Puede tomar entre 1-3 horas hábiles en reflejarse según tu banco.
+                </p>
+            </div>
+            {% else %}
+            <div class="highlight-box">
+                <p>
+                    🚀 Las criptomonedas han sido enviadas a tu wallet registrada.
+                    Puedes verificar la transacción en el explorador de blockchain.
+                </p>
+            </div>
+            {% endif %}
+            
+            <p>Puedes revisar todos los detalles y tu historial completo en tu panel de usuario:</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ dashboard_url }}" class="btn-dashboard">
+                    📊 Ver mi Dashboard
+                </a>
+            </div>
+            
+            <p><strong>¿Tienes alguna pregunta?</strong></p>
+            <p>Nuestro equipo de soporte está disponible para ayudarte. No dudes en contactarnos si necesitas asistencia.</p>
+        </div>
+        
+        <div class="footer">
+            <h4>¡Gracias por confiar en Verso!</h4>
+            <p>Seguimos trabajando para brindarte el mejor servicio de cambio de criptomonedas.</p>
+            <p>Este es un mensaje automático, por favor no respondas a este correo.</p>
+            
+            <div class="social-links">
+                <a href="https://wa.me/+51963597658">📱 WhatsApp</a> |
+                <a href="mailto:soporte@versotek.io">📧 Soporte</a> |
+                <a href="https://versotek.io">🌐 Sitio Web</a>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 12px; color: #9ca3af;">
+                © 2025 Verso - Todos los derechos reservados
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

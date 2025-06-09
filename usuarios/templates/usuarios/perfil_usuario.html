@@ -243,9 +243,18 @@
                         <div class="info-row">
                             <div class="info-label">{{ wallet.get_moneda_display }}</div>
                             <div class="info-value">
-                                <div>{{ wallet.direccion }}</div>
-                                <div class="mt-1">Red: {{ wallet.get_red_display }}
-                                    {% if wallet.alias %} - {{ wallet.alias }}{% endif %}</div>
+                                {% if wallet.es_binance_pay %}
+                                    <div>📧 {{ wallet.direccion }}</div>
+                                    <div class="mt-1">Método: {{ wallet.get_red_display }}</div>
+                                {% else %}
+                                    <div>🔗 {{ wallet.direccion }}</div>
+                                    <div class="mt-1">Red: {{ wallet.get_red_display }}</div>
+                                {% endif %}
+                                
+                                {% if wallet.alias %} 
+                                    <div class="mt-1">Alias: {{ wallet.alias }}</div>
+                                {% endif %}
+                                
                                 <div class="mt-1">
                                     Estado: <span id="estado-wallet-{{ wallet.id }}" 
                                     class="{% if wallet.estado_riesgo == 'OPERATIVO' %}text-success{% elif wallet.estado_riesgo == 'RIESGO' %}text-danger{% elif wallet.estado_riesgo == 'NO_EXISTE' %}text-warning{% else %}text-secondary{% endif %}">
@@ -906,7 +915,55 @@ document.addEventListener('DOMContentLoaded', function() {
             // Establecer la URL de acción del formulario
             const form = document.getElementById('formEditarWallet');
             form.action = `/usuarios/wallet/editar/${walletId}/`;
+            
+            // ✅ Actualizar placeholder después de establecer valores
+            actualizarPlaceholderEditWallet();
         });
+    }
+
+    // ✅ FUNCIÓN PARA CAMBIAR PLACEHOLDER DINÁMICAMENTE EN AGREGAR WALLET
+    function actualizarPlaceholderAgregarWallet() {
+        const redSelect = document.getElementById('id_red_wallet');
+        const direccionInput = document.getElementById('id_direccion_wallet');
+        
+        if (redSelect && direccionInput) {
+            if (redSelect.value === 'BINANCE_PAY') {
+                direccionInput.placeholder = 'correo@ejemplo.com';
+                direccionInput.setAttribute('type', 'email');
+            } else {
+                direccionInput.placeholder = 'Dirección de wallet';
+                direccionInput.setAttribute('type', 'text');
+            }
+        }
+    }
+
+    // ✅ FUNCIÓN PARA CAMBIAR PLACEHOLDER DINÁMICAMENTE EN EDITAR WALLET
+    function actualizarPlaceholderEditWallet() {
+        const redSelect = document.getElementById('edit-wallet-red');
+        const direccionInput = document.getElementById('edit-wallet-direccion');
+        
+        if (redSelect && direccionInput) {
+            if (redSelect.value === 'BINANCE_PAY') {
+                direccionInput.placeholder = 'correo@ejemplo.com';
+                direccionInput.setAttribute('type', 'email');
+            } else {
+                direccionInput.placeholder = 'Dirección de wallet';
+                direccionInput.setAttribute('type', 'text');
+            }
+        }
+    }
+
+    // ✅ MANEJAR CAMBIOS EN SELECTORES DE RED
+    const redSelectAgregar = document.getElementById('id_red_wallet');
+    if (redSelectAgregar) {
+        redSelectAgregar.addEventListener('change', actualizarPlaceholderAgregarWallet);
+        // Actualizar al cargar la página
+        actualizarPlaceholderAgregarWallet();
+    }
+
+    const redSelectEditar = document.getElementById('edit-wallet-red');
+    if (redSelectEditar) {
+        redSelectEditar.addEventListener('change', actualizarPlaceholderEditWallet);
     }
 
     // Manejo del formulario de solicitud de código

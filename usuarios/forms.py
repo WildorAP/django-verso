@@ -275,10 +275,22 @@ class WalletForm(forms.ModelForm):
         fields = ['moneda', 'red', 'direccion', 'alias']
         widgets = {
             'moneda': forms.Select(attrs={'class': 'form-control'}),
-            'red': forms.Select(attrs={'class': 'form-control'}),
-            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
-            'alias': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre para identificar tu wallet (opcional)'}),
+            'red': forms.Select(attrs={'class': 'form-control', 'id': 'id_red_wallet'}),
+            'direccion': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'id': 'id_direccion_wallet',
+                'placeholder': 'Dirección de wallet o correo (para Binance Pay)'
+            }),
+            'alias': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Nombre para identificar tu wallet (opcional)'
+            }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Agregar ayuda dinámica según la red
+        self.fields['direccion'].help_text = "Para redes tradicionales: dirección de wallet. Para Binance Pay: correo electrónico."
 
 class CambiarPasswordForm(forms.Form):
     new_password1 = forms.CharField(

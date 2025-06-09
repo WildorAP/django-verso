@@ -243,6 +243,7 @@ class Wallet(models.Model):
         ('TRX', 'TRON (TRC-20)'),
         ('ETH', 'Ethereum (ERC-20)'),
         ('SOL', 'Solana'),
+        ('BINANCE_PAY', 'Binance Pay'),
     ]
 
     MONEDA_CHOICES = [
@@ -270,7 +271,41 @@ class Wallet(models.Model):
     )
     ultima_verificacion = models.DateTimeField(null=True, blank=True)
 
+    def clean(self):
+        """Validar formato según la red seleccionada"""
+        from django.core.exceptions import ValidationError
+        from django.core.validators import validate_email
+        
+        if self.red == 'BINANCE_PAY':
+            # Para Binance Pay debe ser un correo válido
+            try:
+                validate_email(self.direccion)
+            except ValidationError:
+                raise ValidationError({'direccion': 'Para Binance Pay debe ingresar un correo electrónico válido.'})
+        else:
+            # Para otras redes, validar que NO sea un correo
+            if '@' in self.direccion:
+                raise ValidationError({'direccion': f'Para {self.get_red_display()} debe ingresar una dirección de wallet, no un correo.'})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    @property
+    def es_binance_pay(self):
+        """Verifica si es una wallet de Binance Pay"""
+        return self.red == 'BINANCE_PAY'
+
+    @property
+    def identificador_display(self):
+        """Devuelve el identificador formateado para mostrar"""
+        if self.es_binance_pay:
+            return f"📧 {self.direccion}"
+        return f"🔗 {self.direccion}"
+
     def __str__(self):
+        if self.es_binance_pay:
+            return f"{self.get_moneda_display()} - {self.get_red_display()} - 📧 {self.direccion}"
         return f"{self.get_moneda_display()} - {self.get_red_display()} - {self.direccion}"
 
     class Meta:
@@ -287,6 +322,7 @@ class WalletEmpresa(models.Model):
         ('TRC', 'TRC-20'),
         ('ERC', 'ERC-20'),
         ('BEP', 'BEP-20'),
+        ('BINANCE_PAY', 'Binance Pay')
     ]
 
     moneda = models.CharField(max_length=20, choices=MONEDA_CHOICES)
