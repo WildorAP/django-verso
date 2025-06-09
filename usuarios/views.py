@@ -821,12 +821,13 @@ def verificar_wallet_riesgo(direccion, red=None):
         try:
             r = requests.get(url)
             data = r.json()
-            # Debug log removido para producción
+            print(f"GoPlusLabs response: {data}")  # Debug log
             
             # Verificamos si la dirección existe primero usando la respuesta completa
             if data.get("code") == 1:  # La API devuelve código 1 cuando la solicitud es exitosa
                 result = data.get("result", {}).get(direccion.lower(), {})
                 if not result:
+                    print(f"No data found for address in GoPlusLabs response")
                     # Si no hay datos para esta dirección, intentamos con Etherscan
                     raise Exception("No data found in GoPlusLabs")
                 
@@ -875,23 +876,11 @@ def verificar_wallet_riesgo(direccion, red=None):
                 }
             
             # Si GoPlusLabs no pudo verificar, intentamos con Etherscan
-            from django.conf import settings
-            etherscan_api_key = getattr(settings, 'ETHERSCAN_API_KEY', None)
-            
-            if not etherscan_api_key:
-                return {
-                    'valid': False,
-                    'riesgo': False,
-                    'detalles_riesgo': {
-                        'factores': ["Etherscan API key no configurada"],
-                        'total_factores': 1,
-                        'fuente': 'Error de configuración'
-                    }
-                }
+            etherscan_api_key = "NSZCD6S4TKVWRS13PMQFMVTNP6H7NAGHUY"  # API key real de Etherscan
             etherscan_url = f"https://api.etherscan.io/api?module=account&action=balance&address={direccion}&tag=latest&apikey={etherscan_api_key}"
             r = requests.get(etherscan_url)
             data = r.json()
-            # Debug log removido para producción
+            print(f"Etherscan response: {data}")  # Debug log
             
             # Etherscan devuelve status "1" si la solicitud es exitosa
             if data.get("status") == "1":
@@ -902,12 +891,12 @@ def verificar_wallet_riesgo(direccion, red=None):
                 tx_url = f"https://api.etherscan.io/api?module=account&action=txlist&address={direccion}&startblock=0&endblock=99999999&sort=asc&apikey={etherscan_api_key}"
                 tx_response = requests.get(tx_url)
                 tx_data = tx_response.json()
-                # Debug log removido para producción
+                print(f"Etherscan TX response: {tx_data}")  # Debug log
                 
                 # Si la dirección existe, debería tener al menos 1 transacción o un balance > 0
                 if tx_data.get("status") == "1":
                     transactions = tx_data.get("result", [])
-                    # Debug log removido para producción
+                    print(f"Balance: {balance}, Transactions count: {len(transactions)}")  # Debug log
                     
                     # Dirección válida si tiene balance > 0 O tiene transacciones
                     if balance > 0 or len(transactions) > 0:
@@ -946,7 +935,7 @@ def verificar_wallet_riesgo(direccion, red=None):
                     }
             elif data.get("status") == "0":
                 error_msg = data.get("result", "Unknown error")
-                # Error log removido para producción
+                print(f"Etherscan error: {error_msg}")
                 if "Invalid API Key" in error_msg:
                     return {
                         'valid': False,
@@ -982,10 +971,7 @@ def verificar_wallet_riesgo(direccion, red=None):
             }
             
         except Exception as e:
-            # Error log using Django logging instead of print for production
-            import logging
-            logger = logging.getLogger('usuarios')
-            logger.error(f"Error verificando ETH: {str(e)}")
+            print(f"Error verificando ETH: {str(e)}")
             # En caso de error, siempre devolver como inválida
             # No podemos garantizar que la dirección sea válida si no la pudimos verificar
             return {
@@ -1013,9 +999,7 @@ def verificar_wallet_riesgo(direccion, red=None):
                 }
             }
         except Exception as e:
-            import logging
-            logger = logging.getLogger('usuarios')
-            logger.error(f"Error verificando TRON: {str(e)}")
+            print(f"Error verificando TRON: {str(e)}")
             return {
                 'valid': False,
                 'riesgo': False,
@@ -1045,9 +1029,7 @@ def verificar_wallet_riesgo(direccion, red=None):
                 }
             }
         except Exception as e:
-            import logging
-            logger = logging.getLogger('usuarios')
-            logger.error(f"Error verificando Solana: {str(e)}")
+            print(f"Error verificando Solana: {str(e)}")
             return {
                 'valid': False,
                 'riesgo': False,
@@ -1098,9 +1080,7 @@ def verificar_wallet(request, wallet_id):
         })
         
     except Exception as e:
-        import logging
-        logger = logging.getLogger('usuarios')
-        logger.error(f"Error en verificar_wallet: {str(e)}")
+        print(f"Error en verificar_wallet: {str(e)}")
         return JsonResponse({
             'status': 'error',
             'message': str(e)
