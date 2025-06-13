@@ -90,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_project.context_processors.google_analytics',
             ],
         },
     },
@@ -373,3 +374,22 @@ else:
 # Configuración específica para constancias
 CONSTANCIAS_STORAGE = 'usuarios.storage.ConstanciasStorage'
 VERIFICATION_DOCS_STORAGE = 'usuarios.storage.VerificationDocumentsStorage'
+
+# ============================================================================
+# CONFIGURACIÓN DE GOOGLE ANALYTICS
+# ============================================================================
+
+# Google Analytics
+GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID')
+GOOGLE_ANALYTICS_ENABLED = os.getenv('GOOGLE_ANALYTICS_ENABLED', 'False').lower() == 'true'
+
+# Verificar configuración de Google Analytics
+if GOOGLE_ANALYTICS_ENABLED:
+    if not GOOGLE_ANALYTICS_ID:
+        print("⚠️  GOOGLE_ANALYTICS_ID no está configurado en el archivo .env")
+        print("   Google Analytics no funcionará hasta que se configure el ID.")
+        GOOGLE_ANALYTICS_ENABLED = False
+    else:
+        print(f"✅ Google Analytics configurado con ID: {GOOGLE_ANALYTICS_ID}")
+else:
+    print("ℹ️  Google Analytics está deshabilitado")

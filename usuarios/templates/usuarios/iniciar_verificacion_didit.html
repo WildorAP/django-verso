@@ -229,21 +229,137 @@
 
 @media (max-width: 768px) {
     .verificacion-container {
-        margin: 20px;
-        padding: 20px;
+        margin: 15px;
+        padding: 15px;
+        border-radius: 10px;
     }
     
     .verificacion-titulo {
         font-size: 1.5rem;
     }
     
+    .verificacion-subtitulo {
+        font-size: 1rem;
+    }
+    
+    .verificacion-icon {
+        font-size: 3rem;
+    }
+    
+    .proceso-steps {
+        padding: 15px;
+    }
+    
     .step {
         flex-direction: column;
         text-align: center;
+        padding: 12px;
     }
     
     .step-number {
-        margin-bottom: 10px;
+        margin: 0 auto 10px;
+    }
+    
+    .step-content h5 {
+        font-size: 1rem;
+    }
+    
+    .step-content p {
+        font-size: 0.9rem;
+    }
+    
+    .btn-iniciar-verificacion {
+        padding: 15px 20px;
+        font-size: 1.1rem;
+    }
+    
+    .btn-volver {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .verificacion-container {
+        margin: 10px;
+        padding: 12px;
+    }
+    
+    .verificacion-titulo {
+        font-size: 1.3rem;
+    }
+    
+    .verificacion-subtitulo {
+        font-size: 0.9rem;
+    }
+    
+    .verificacion-icon {
+        font-size: 2.5rem;
+    }
+    
+    .proceso-steps h4 {
+        font-size: 1.1rem;
+    }
+    
+    .requisitos {
+        padding: 15px;
+    }
+    
+    .requisitos h5 {
+        font-size: 1rem;
+    }
+    
+    .requisitos li {
+        font-size: 0.9rem;
+    }
+    
+    .seguridad-info {
+        padding: 15px;
+    }
+    
+    .seguridad-info h5 {
+        font-size: 1rem;
+    }
+    
+    .seguridad-info p {
+        font-size: 0.9rem;
+    }
+    
+    .btn-iniciar-verificacion {
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+    
+    .btn-volver {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .verificacion-container {
+        margin: 5px;
+        padding: 10px;
+    }
+    
+    .verificacion-titulo {
+        font-size: 1.2rem;
+    }
+    
+    .verificacion-subtitulo {
+        font-size: 0.85rem;
+    }
+    
+    .verificacion-icon {
+        font-size: 2rem;
+    }
+    
+    .step-content p {
+        font-size: 0.85rem;
+    }
+    
+    .requisitos li {
+        font-size: 0.85rem;
     }
 }
 </style>
@@ -307,7 +423,7 @@
                     <li><i class="fas fa-check"></i> Buena iluminación natural o artificial</li>
                     <li><i class="fas fa-check"></i> Cámara funcionando correctamente</li>
                     <li><i class="fas fa-check"></i> Conexión estable a internet</li>
-                    <li><i class="fas fa-check"></i> Unos 5-10 minutos de tiempo disponible</li>
+                    <li><i class="fas fa-check"></i> Menos de 5 minutos de tiempo disponible</li>
                 </ul>
             </div>
 
